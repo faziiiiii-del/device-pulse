@@ -7,8 +7,14 @@ DerivedData/
 xcuserdata/
 *.xcuserstate
 
-# XcodeGen-generated project (project.yml is the source of truth)
-DevicePulse.xcodeproj/
+# DevicePulse.xcodeproj IS committed (not gitignored) — Xcode Cloud needs it present in
+# the repo to detect the project/scheme when a workflow is first created in App Store
+# Connect. project.yml is still the source of truth for day-to-day edits; regenerate with
+# `xcodegen generate` after changing it. ci_scripts/ci_post_clone.sh also regenerates it
+# on every Xcode Cloud build as a safety net against drift between commits.
+
+# Claude Code session state (not project source)
+.claude/
 
 # macOS
 .DS_Store
