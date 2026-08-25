@@ -1,11 +1,73 @@
 # Device Pulse — Project Status
 
-_Updated 2026-08-23 (later session): Security section, dual theming
-(Classic/Frosted), three new Storage tools (Duplicate Finder, Space
-Map, Saved Wi-Fi Networks), and a round of real bug fixes across both
-targets. See "Later session" below for the full rundown — the original
-theming/feature/hardening pass description further down is still
-accurate for everything it covers, just no longer the latest state._
+_Updated 2026-08-25: repo went live on GitHub, Xcode Cloud groundwork,
+and distribution decisions made. See "2026-08-25 session" below for
+the full rundown — everything further down is still accurate for what
+it covers, just no longer the latest state._
+
+## 2026-08-25 session: repo live, CI groundwork, distribution decisions
+
+**Git/GitHub**: this project had no git history at all before now.
+Initialized locally, `.gitignore` added (excludes `build/`, `.DS_Store`,
+`.claude/`; the generated `.xcodeproj` is **committed**, not ignored —
+Xcode Cloud needs it present in the repo to detect the project when a
+workflow is first created in App Store Connect). Pushed to
+[github.com/faziiiiii-del/device-pulse](https://github.com/faziiiiii-del/device-pulse)
+(private).
+
+**Distribution decision, made deliberately after a real audit, not by
+default**: macOS → **Developer ID** (signed + notarized, outside the
+App Store), iOS → **App Store**. The Mac app currently runs unsandboxed
+because it shells out to `/bin/ps`, `/bin/launchctl`, `/usr/bin/nettop`
+(quitting other apps, LaunchAgent enable/disable, per-process network),
+and separately scans `/Applications`, `~/Library`, and LaunchAgents/
+Daemons broadly on its own for Storage/Uninstaller/Duplicate Finder/
+Space Map/Security — none of that survives App Store sandboxing without
+a real UX redesign (folder-picker-based access instead of automatic
+scanning), and Security specifically risks rejection regardless of
+rework. User's call after seeing the full scope: **not worth it** — the
+Mac app is genuinely the better product as built, so App Store
+sandboxing would mean cutting it down rather than shipping it as-is.
+Explicitly revisitable later if the user decides the sandboxing rework
+is worth doing — nothing done this session forecloses that.
+
+**Xcode Cloud groundwork**: `ci_scripts/ci_post_clone.sh` installs
+XcodeGen and regenerates the `.xcodeproj` from `project.yml` on every
+CI build (guards against the committed copy drifting from
+`project.yml`, which remains the source of truth for day-to-day edits).
+`DEVELOPMENT_TEAM: TNXUTW58NH` set explicitly in `project.yml` for both
+targets — first attempt got this wrong (misread a certificate's own
+identifier as the team ID from an Xcode screenshot; the real one only
+surfaced via Xcode's "Update to Recommended Settings" action, which
+resolves it from the actually-selected team). Caught before it could
+fail signing on a fresh clone. Also found and fixed real
+non-determinism in XcodeGen's default scheme generation — a clean
+regenerate sometimes wrote zero shared scheme files, sometimes one,
+confirmed by regenerating several times in a row with no other
+changes — fixed by declaring both schemes explicitly with `shared: true`
+in `project.yml`, which produces the same two shared scheme files on
+every regeneration.
+
+**Real bug fix, unrelated to the above**: `DevicePulseMac` was throwing
+14 warnings (`Cannot use generic class 'Autoconnect'...` /
+`Cannot use enum 'Publishers'...` across `MacBatteryView`,
+`MacDashboardView`, `MacMemoryView`, `MacMenuBarView`,
+`MacProcessesView`). First guess was a Swift 6 Sendable/concurrency
+issue and reached for `nonisolated(unsafe)` — wrong diagnosis, reverted
+once the actual compiler text was read closely: a plain missing
+`import Combine` (all 5 files only imported SwiftUI; the newer SDK this
+project now builds against no longer implicitly re-exports Combine
+through SwiftUI the way older ones did). Both targets build with zero
+warnings now beyond a benign AppIntents metadata notice.
+
+**Still needs the user's own account-level action** (can't be done
+without their Apple ID/App Store Connect login): create the iOS app
+record in App Store Connect under `com.faziii.devicepulse`; create the
+Xcode Cloud workflow in Xcode (Product ▸ Xcode Cloud ▸ Create Workflow)
+pointed at the GitHub repo, configured to build+test both targets and
+archive+submit iOS to TestFlight; for Mac, follow the existing
+Developer ID signing + notarization steps in `DISTRIBUTION.md` once
+ready to actually distribute.
 
 ## Later session (2026-08-23, second pass)
 
