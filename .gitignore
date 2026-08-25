@@ -1,0 +1,22 @@
+# Xcode
+build/
+DerivedData/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+xcuserdata/
+*.xcuserstate
+
+# XcodeGen-generated project (project.yml is the source of truth)
+DevicePulse.xcodeproj/
+
+# macOS
+.DS_Store
+
+# Swift Package Manager
+.swiftpm/
+.build/
+
+# Notarization / signing artifacts
+*.p12
+*.mobileprovision
