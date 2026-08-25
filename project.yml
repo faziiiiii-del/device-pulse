@@ -29,6 +29,7 @@ targets:
         TARGETED_DEVICE_FAMILY: "1"
         SWIFT_VERSION: "5.0"
         CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: 3LU8SC6F3Y
         ENABLE_USER_SCRIPT_SANDBOXING: YES
 
   DevicePulseMac:
@@ -50,5 +51,18 @@ targets:
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.utilities
         SWIFT_VERSION: "5.0"
         CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: 3LU8SC6F3Y
         MACOSX_DEPLOYMENT_TARGET: "13.0"
         ENABLE_USER_SCRIPT_SANDBOXING: YES
+
+schemes:
+  DevicePulse:
+    build:
+      targets:
+        DevicePulse: all
+    shared: true
+  DevicePulseMac:
+    build:
+      targets:
+        DevicePulseMac: all
+    shared: true
