@@ -16,6 +16,7 @@
 //  looks (see MacThermalMonitor, MacCPUView).
 //
 
+import Combine
 import SwiftUI
 
 struct MacDashboardView: View {

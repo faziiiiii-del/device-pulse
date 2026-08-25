@@ -3,6 +3,7 @@
 //  DevicePulseMac
 //
 
+import Combine
 import SwiftUI
 
 private struct BatterySample {

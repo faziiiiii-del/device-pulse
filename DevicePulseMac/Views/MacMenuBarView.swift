@@ -7,6 +7,7 @@
 //  even when the main window is closed.
 //
 
+import Combine
 import SwiftUI
 
 struct MacMenuBarLabel: View {

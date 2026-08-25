@@ -3,6 +3,7 @@
 //  DevicePulseMac
 //
 
+import Combine
 import SwiftUI
 
 struct MacMemoryView: View {

@@ -13,6 +13,7 @@
 //  listing, which could destabilize the Mac.
 //
 
+import Combine
 import SwiftUI
 
 private struct ProcessRow: Identifiable {
