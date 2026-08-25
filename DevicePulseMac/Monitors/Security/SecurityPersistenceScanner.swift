@@ -21,6 +21,12 @@ struct PersistenceItem {
     /// belongs to, e.g. "User LaunchAgent".
     let owner: String
     let isLoaded: Bool
+    /// The exact `launchctl` domain target this item loads into (e.g.
+    /// "gui/501" or "system") — carried through to `SecurityFinding` so a
+    /// "Disable" action can unload the real running job via
+    /// `launchctl bootout <domainTarget>/<label>`, not just move the plist
+    /// file (which does nothing to a job launchd already has loaded).
+    let domainTarget: String
 }
 
 enum SecurityPersistenceScanner {
@@ -46,20 +52,40 @@ enum SecurityPersistenceScanner {
                 let label = plist["Label"] as? String ?? (file as NSString).deletingPathExtension
                 let program = (plist["Program"] as? String) ?? (plist["ProgramArguments"] as? [String])?.first
 
+                let domain = isDaemon ? "system" : "gui/\(getuid())"
                 items.append(PersistenceItem(
                     label: label, plistPath: fullPath, programPath: program, owner: owner,
-                    isLoaded: isLoaded(label: label, isDaemon: isDaemon)
+                    isLoaded: isLoaded(label: label, domain: domain), domainTarget: domain
                 ))
             }
         }
         return items
     }
 
-    private static func isLoaded(label: String, isDaemon: Bool) -> Bool {
-        let domain = isDaemon ? "system" : "gui/\(getuid())"
+    private static func isLoaded(label: String, domain: String) -> Bool {
         let task = Process()
         task.executableURL = URL(fileURLWithPath: "/bin/launchctl")
         task.arguments = ["print", "\(domain)/\(label)"]
+        task.standardOutput = Pipe()
+        task.standardError = Pipe()
+        guard (try? task.run()) != nil else { return false }
+        task.waitUntilExit()
+        return task.terminationStatus == 0
+    }
+
+    /// Unloads a running launchd job via the standard, documented `launchctl bootout`
+    /// command — the same mechanism Startup Optimiser's `MacStartupMonitor.disable(_:)`
+    /// uses. Necessary because just moving/quarantining the plist file does nothing to a
+    /// job launchd has already loaded into memory: launchd reads the plist once at load
+    /// time and keeps running from its own in-memory copy, so the flagged program keeps
+    /// running until reboot unless it's explicitly booted out. A LaunchDaemon (`system`
+    /// domain) requires the app to be running with admin privileges; that failure is
+    /// surfaced to the caller as `false` rather than silently doing nothing.
+    @discardableResult
+    static func disable(domainTarget: String, label: String) -> Bool {
+        let task = Process()
+        task.executableURL = URL(fileURLWithPath: "/bin/launchctl")
+        task.arguments = ["bootout", "\(domainTarget)/\(label)"]
         task.standardOutput = Pipe()
         task.standardError = Pipe()
         guard (try? task.run()) != nil else { return false }

@@ -31,6 +31,7 @@ struct SecurityView: View {
     @State private var selectedFinding: SecurityFinding?
     @State private var pendingQuarantine: SecurityFinding?
     @State private var pendingDelete: DevicePulseQuarantineRecord?
+    @State private var pendingDisable: SecurityFinding?
     @State private var toastMessage: String?
 
     var body: some View {
@@ -103,6 +104,20 @@ struct SecurityView: View {
         } message: {
             if let record = pendingDelete {
                 Text("This permanently deletes \((record.originalPath as NSString).lastPathComponent) from quarantine. This cannot be undone.")
+            }
+        }
+        .alert(
+            pendingDisable.map { "Disable \($0.name)?" } ?? "",
+            isPresented: Binding(get: { pendingDisable != nil }, set: { if !$0 { pendingDisable = nil } })
+        ) {
+            Button("Cancel", role: .cancel) { pendingDisable = nil }
+            Button("Disable", role: .destructive) {
+                if let finding = pendingDisable { performDisable(finding) }
+                pendingDisable = nil
+            }
+        } message: {
+            if let finding = pendingDisable {
+                Text("This stops \(finding.name) from running now (launchctl bootout) and moves its launch-item file to Device Pulse's quarantine folder so it won't be reloaded automatically. Reversible from Quarantine below.")
             }
         }
     }
@@ -221,6 +236,7 @@ struct SecurityView: View {
                         finding: finding,
                         onInspect: { selectedFinding = finding },
                         onQuarantine: { pendingQuarantine = finding },
+                        onDisable: { pendingDisable = finding },
                         onIgnore: { ignoreFinding(finding) }
                     )
                     if finding.id != sortedFindings.last?.id { Divider() }
@@ -496,6 +512,32 @@ struct SecurityView: View {
         scheduleToastDismiss()
     }
 
+    /// The correct remediation for a `.suspiciousPersistence` finding is NOT the generic
+    /// "move this one file to quarantine" — the file being flagged is the launch-item
+    /// plist, and launchd reads that once at load time and keeps the job running from its
+    /// own in-memory copy. Moving the plist alone leaves the job running until reboot.
+    /// This does both steps together: unload the real running job via `launchctl
+    /// bootout`, then quarantine the plist so it can't be silently reloaded.
+    private func performDisable(_ finding: SecurityFinding) {
+        guard let domainTarget = finding.persistenceDomainTarget, let label = finding.persistenceLabel else {
+            toastMessage = "Couldn't disable — missing launch-item details."
+            scheduleToastDismiss()
+            return
+        }
+        guard SecurityPersistenceScanner.disable(domainTarget: domainTarget, label: label) else {
+            toastMessage = domainTarget == "system"
+                ? "Couldn't disable — LaunchDaemons require admin privileges."
+                : "Couldn't disable this launch item."
+            scheduleToastDismiss()
+            return
+        }
+        _ = SecurityQuarantineManager.quarantine(path: finding.path, findingName: finding.name, reason: finding.reason)
+        quarantineRecords = SecurityQuarantineManager.loadRecords()
+        lastResult?.findings.removeAll { $0.id == finding.id }
+        toastMessage = "Disabled and moved to quarantine."
+        scheduleToastDismiss()
+    }
+
     private func ignoreFinding(_ finding: SecurityFinding) {
         SecurityIgnoreList.ignore(finding.path)
         ignoredPaths = SecurityIgnoreList.all()
@@ -537,7 +579,18 @@ private struct SecurityFindingRow: View {
     let finding: SecurityFinding
     let onInspect: () -> Void
     let onQuarantine: () -> Void
+    let onDisable: () -> Void
     let onIgnore: () -> Void
+
+    /// A persistence finding whose launch-item is a user/global LaunchAgent (not a
+    /// LaunchDaemon) can actually be unloaded via `launchctl bootout` without admin
+    /// privileges — that's the case where "Disable" is a real, working action rather than
+    /// one that would just fail. LaunchDaemons need admin (same limitation Startup
+    /// Optimiser already has), so those fall back to the generic Quarantine action, which
+    /// at least removes the plist rather than claiming to do something that would fail.
+    private var canDisable: Bool {
+        finding.type == .suspiciousPersistence && finding.persistenceDomainTarget?.hasPrefix("gui/") == true
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -553,7 +606,12 @@ private struct SecurityFindingRow: View {
             Text(finding.reason).font(.caption).foregroundStyle(.secondary)
             HStack(spacing: 8) {
                 Button("Inspect", action: onInspect).buttonStyle(.bordered).controlSize(.small)
-                Button("Quarantine", action: onQuarantine).buttonStyle(.bordered).controlSize(.small)
+                if canDisable {
+                    Button("Disable", action: onDisable).buttonStyle(.bordered).controlSize(.small)
+                        .help("Stops this from running now and prevents it from launching again — the correct action for an auto-launching item, unlike Quarantine alone.")
+                } else {
+                    Button("Quarantine", action: onQuarantine).buttonStyle(.bordered).controlSize(.small)
+                }
                 Button("Ignore", action: onIgnore).buttonStyle(.bordered).controlSize(.small)
                     .help("Reviewed this and it's fine — hide it from future scans without touching the file.")
                 Spacer()

@@ -80,6 +80,14 @@ enum SecurityScanner {
         "node_modules", ".git", ".svn", ".hg", "venv", ".venv", "env", ".tox",
         "Pods", "DerivedData", ".build", "build", "target", "vendor",
         ".cache", ".npm", ".cargo", ".rustup", "dist", ".next", ".gradle",
+        // Developer version/toolchain managers — each owns a directory tree
+        // full of legitimately-unsigned shims/binaries for every installed
+        // runtime version, which produced dozens of "suspicious executable"
+        // findings for completely ordinary developer machines during
+        // testing (rbenv/pyenv/nvm shims specifically — none of these are
+        // ever code-signed, that's not a signal, it's just how they work).
+        ".rbenv", ".pyenv", ".nvm", ".rvm", ".asdf", ".volta", ".sdkman",
+        ".docker", ".gem", ".yarn", ".pnpm-store",
     ]
 
     static func quickScanLocations() -> [String] {
@@ -259,7 +267,21 @@ enum SecurityScanner {
         let created = attrs?[.creationDate] as? Date
         let modified = attrs?[.modificationDate] as? Date
         let quarantine = SecurityQuarantineManager.inspectQuarantineAttribute(path: path)
-        let risk = classifyRisk(isInvalid: signing.status == .invalid, hasPersistence: false, isUnusualLocation: false, isRecent: isRecent(created))
+        let recent = isRecent(created)
+
+        // Being unsigned is not, by itself, a reason to report a finding — the vast
+        // majority of legitimate indie/open-source Mac apps are unsigned, and an app
+        // that's sat in /Applications for months, was never flagged by macOS's own
+        // quarantine (i.e. it already passed the user's own Gatekeeper "are you sure"
+        // decision at some point), and hasn't been touched recently is indistinguishable
+        // from an app the user has already reviewed and decided to trust. Only report
+        // when there's an actual additional signal: a broken/tampered signature (always
+        // worth surfacing), still-quarantined-by-macOS (never actually cleared), or very
+        // recent (installed/modified in the last two weeks, still worth a first look).
+        let hasSignal = signing.status == .invalid || quarantine == .quarantinedByMacOS || recent
+        guard hasSignal else { return nil }
+
+        let risk = classifyRisk(isInvalid: signing.status == .invalid, hasPersistence: false, isUnusualLocation: false, isRecent: recent)
 
         let reason = signing.status == .invalid
             ? "This app's code signature does not validate — it may have been modified after it was signed."
@@ -290,6 +312,20 @@ enum SecurityScanner {
         let recent = isRecent(created)
         let unusualLocation = scannedRoot.hasSuffix("/Downloads") || scannedRoot.hasSuffix("/Desktop")
         let isScript = scriptExtensions.contains(url.pathExtension.lowercased())
+
+        // Scripts are *never* code-signed — that's simply how interpreted scripts work,
+        // not a suspicious property — so "unsigned" alone would otherwise flag every
+        // personal shell/Python script a developer has ever written, anywhere in their
+        // home directory, forever. Same logic as inspectAppBundle: only report when
+        // there's a real additional signal beyond "unsigned": a broken signature, sitting
+        // directly in Downloads/Desktop rather than wherever the user actually keeps their
+        // tools, still marked quarantined by macOS (i.e. downloaded and never opened/
+        // cleared), or created within the last two weeks. An old script living quietly in
+        // ~/bin or a project's scripts/ folder — the overwhelming common case — is not a
+        // security finding, it's just a script.
+        let hasSignal = signing.status == .invalid || unusualLocation || recent || quarantine == .quarantinedByMacOS
+        guard hasSignal else { return nil }
+
         let risk = classifyRisk(isInvalid: signing.status == .invalid, hasPersistence: false, isUnusualLocation: unusualLocation, isRecent: recent)
 
         var reasonParts: [String] = [
@@ -340,7 +376,8 @@ enum SecurityScanner {
                 detectionMethod: "launchd persistence scan + code-signing inspection",
                 signatureStatus: signing.status, developerName: signing.developerName, teamID: signing.teamID,
                 quarantineStatus: quarantine, sha256: sha, hashReputation: sha != nil ? .unavailable : nil,
-                fileSizeBytes: attrs?[.size] as? Int64, createdDate: created, modifiedDate: modified, persistenceLabel: item.label
+                fileSizeBytes: attrs?[.size] as? Int64, createdDate: created, modifiedDate: modified,
+                persistenceLabel: item.label, persistenceDomainTarget: item.domainTarget
             ))
         }
         return findings

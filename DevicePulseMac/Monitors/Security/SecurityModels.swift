@@ -100,6 +100,13 @@ struct SecurityFinding: Identifiable, Equatable {
     var createdDate: Date?
     var modifiedDate: Date?
     var persistenceLabel: String?
+    /// The exact `launchctl` domain target (e.g. "gui/501" or "system") this
+    /// persistence item loads into — only set for `.suspiciousPersistence`
+    /// findings. Lets the "Disable" action unload the real running launchd
+    /// job (`launchctl bootout <domainTarget>/<persistenceLabel>`) instead of
+    /// just moving the plist file, which does nothing to a job launchd
+    /// already has loaded into memory.
+    var persistenceDomainTarget: String?
     var isDevicePulseQuarantined: Bool = false
 
     init(
@@ -107,7 +114,8 @@ struct SecurityFinding: Identifiable, Equatable {
         detectionMethod: String, signatureStatus: SecuritySignatureStatus, developerName: String? = nil,
         teamID: String? = nil, gatekeeperAssessment: String? = nil, quarantineStatus: SecurityQuarantineStatus = .unknown,
         sha256: String? = nil, hashReputation: HashReputationResult? = nil, fileSizeBytes: Int64? = nil,
-        createdDate: Date? = nil, modifiedDate: Date? = nil, persistenceLabel: String? = nil
+        createdDate: Date? = nil, modifiedDate: Date? = nil, persistenceLabel: String? = nil,
+        persistenceDomainTarget: String? = nil
     ) {
         self.id = UUID()
         self.name = name
@@ -127,6 +135,7 @@ struct SecurityFinding: Identifiable, Equatable {
         self.createdDate = createdDate
         self.modifiedDate = modifiedDate
         self.persistenceLabel = persistenceLabel
+        self.persistenceDomainTarget = persistenceDomainTarget
     }
 }
 
