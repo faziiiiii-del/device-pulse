@@ -12,6 +12,8 @@ struct MacStorageView: View {
     @State private var isScanning = false
     @State private var hasScanned = false
     @State private var selectedCategory: StorageCategory?
+    @State private var diskHealth: [DiskHealthInfo] = []
+    @State private var isLoadingDiskHealth = true
 
     var body: some View {
         ScrollView {
@@ -67,14 +69,57 @@ struct MacStorageView: View {
                         )
                     }
                 }
+
+                diskHealthCard
             }
             .padding(24)
         }
         .onAppear {
             volumes = MacStorageMonitor.allVolumes()
+            loadDiskHealth()
         }
         .sheet(item: $selectedCategory) { category in
             MacStorageCategoryDetailView(category: category)
+        }
+    }
+
+    private var diskHealthCard: some View {
+        MacCard(title: "Disk Health", systemImage: "heart.text.square", tint: MacSection.storage.tint) {
+            if isLoadingDiskHealth {
+                Text("Checking S.M.A.R.T. status…").font(.caption).foregroundStyle(.secondary)
+            } else if diskHealth.isEmpty {
+                Text("No physical disks reported S.M.A.R.T. status.").font(.caption).foregroundStyle(.secondary)
+            } else {
+                VStack(spacing: 0) {
+                    ForEach(diskHealth) { disk in
+                        HStack(alignment: .top, spacing: 10) {
+                            StatusDot(level: disk.smart.level)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(disk.mediaName).font(.subheadline).bold()
+                                Text(disk.smart.label).font(.caption).foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                            if let size = disk.totalSizeBytes {
+                                Text(ByteFormat.string(size)).font(.caption).foregroundStyle(.tertiary)
+                            }
+                        }
+                        .padding(.vertical, 6)
+                        if disk.id != diskHealth.last?.id { Divider() }
+                    }
+                }
+                Text("Read directly from each drive's own controller via diskutil — the same documented mechanism Disk Utility uses. \"Not Supported\" means the drive itself doesn't report SMART data, not that anything's wrong.")
+                    .font(.caption2).foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    private func loadDiskHealth() {
+        DispatchQueue.global(qos: .utility).async {
+            let result = MacDiskHealthMonitor.scan()
+            DispatchQueue.main.async {
+                diskHealth = result
+                isLoadingDiskHealth = false
+            }
         }
     }
 
