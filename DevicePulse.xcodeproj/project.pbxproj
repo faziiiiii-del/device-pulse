@@ -30,6 +30,7 @@
 		32EC06F3B154746C41C3814D /* MacDiagnosticsEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DB0F1621E10F7246B2E3D2 /* MacDiagnosticsEngine.swift */; };
 		350F31A0BD55C1B2159964A3 /* DevicePulseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FCA297D7182B02C1E2C64D /* DevicePulseApp.swift */; };
 		39140DFA9CC7770FA6DBA172 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16BFA58E15B134C04936E4F6 /* NetworkMonitor.swift */; };
+		3ADC5F666E473BBE627FCE9E /* MacTimeMachineMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8D727512B24AC9A8108070C /* MacTimeMachineMonitor.swift */; };
 		40EAC6FB9B6ADE4179F61667 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4CD22DB3AAB1A05D620ECAF /* Assets.xcassets */; };
 		420AB9AE7AB088DF0B59BA45 /* MacBigFilesScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 459442497A1CE5BCB08AAD10 /* MacBigFilesScanner.swift */; };
 		448E89608FE2EA79C53B787F /* DevicePulseMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9D7A1994C728FA34B425CE /* DevicePulseMacApp.swift */; };
@@ -197,6 +198,7 @@
 		F71FFFEA3F7333C4A0CE9647 /* MacDeviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDeviceView.swift; sourceTree = "<group>"; };
 		F820999029635E4D8E5FB4A8 /* DevicePulseMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DevicePulseMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8B24A50D30D16BE66B7315E /* ThermalMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThermalMonitor.swift; sourceTree = "<group>"; };
+		F8D727512B24AC9A8108070C /* MacTimeMachineMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacTimeMachineMonitor.swift; sourceTree = "<group>"; };
 		FD5DDA2F0EA75A46C81B1D3E /* NetworkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkView.swift; sourceTree = "<group>"; };
 		FD928AA7CE50D8547EAE3382 /* MacSpaceMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacSpaceMapView.swift; sourceTree = "<group>"; };
 		FE869E1B3A6F50F7CAC9A437 /* MacDuplicateScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDuplicateScanner.swift; sourceTree = "<group>"; };
@@ -240,6 +242,7 @@
 				BAA1BD881404881766A197EF /* MacStorageMonitor.swift */,
 				666B31B0282D251793A6F0E0 /* MacStorageScanner.swift */,
 				635293B1D0FAFDB58AB40A33 /* MacThermalMonitor.swift */,
+				F8D727512B24AC9A8108070C /* MacTimeMachineMonitor.swift */,
 				B50BB03DEA2B58A2281F0D72 /* MacTrashUndo.swift */,
 				C1AFCC39A6A39FD927F5FCD0 /* MacWiFiNetworksMonitor.swift */,
 				4E27AB2F903CA17A05937DB7 /* Treemap.swift */,
@@ -549,6 +552,7 @@
 				5C84FC5FB3C768244EF383D4 /* MacStorageView.swift in Sources */,
 				7E24E59E5295788CC14B4A98 /* MacTheme.swift in Sources */,
 				44BBBF81FD64610EC41F5F1B /* MacThermalMonitor.swift in Sources */,
+				3ADC5F666E473BBE627FCE9E /* MacTimeMachineMonitor.swift in Sources */,
 				7644E701379C1064644F8818 /* MacTrashUndo.swift in Sources */,
 				CFECE99741808BA6FEBE6A0B /* MacUndoToast.swift in Sources */,
 				2E006527A6E541F73B950290 /* MacUninstallerView.swift in Sources */,

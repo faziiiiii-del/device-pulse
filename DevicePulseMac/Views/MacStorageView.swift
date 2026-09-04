@@ -14,6 +14,8 @@ struct MacStorageView: View {
     @State private var selectedCategory: StorageCategory?
     @State private var diskHealth: [DiskHealthInfo] = []
     @State private var isLoadingDiskHealth = true
+    @State private var timeMachineStatus: TimeMachineStatus?
+    @State private var isLoadingTimeMachine = true
 
     var body: some View {
         ScrollView {
@@ -71,12 +73,14 @@ struct MacStorageView: View {
                 }
 
                 diskHealthCard
+                timeMachineCard
             }
             .padding(24)
         }
         .onAppear {
             volumes = MacStorageMonitor.allVolumes()
             loadDiskHealth()
+            loadTimeMachineStatus()
         }
         .sheet(item: $selectedCategory) { category in
             MacStorageCategoryDetailView(category: category)
@@ -119,6 +123,62 @@ struct MacStorageView: View {
             DispatchQueue.main.async {
                 diskHealth = result
                 isLoadingDiskHealth = false
+            }
+        }
+    }
+
+    private var timeMachineCard: some View {
+        MacCard(title: "Time Machine", systemImage: "clock.arrow.circlepath", tint: MacSection.storage.tint) {
+            if isLoadingTimeMachine {
+                Text("Checking backup status…").font(.caption).foregroundStyle(.secondary)
+            } else if let tm = timeMachineStatus {
+                if !tm.isConfigured {
+                    Text("Time Machine isn't set up — no backup destination is configured.")
+                        .font(.caption).foregroundStyle(.secondary)
+                } else {
+                    HStack(alignment: .top, spacing: 10) {
+                        StatusDot(level: timeMachineLevel(tm))
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(tm.destinationName ?? "Time Machine").font(.subheadline).bold()
+                            if let kind = tm.destinationKind {
+                                Text(kind).font(.caption2).foregroundStyle(.tertiary)
+                            }
+                            if tm.isRunning {
+                                if let percent = tm.percentComplete {
+                                    Text("Backup in progress — \(Int(percent * 100))%").font(.caption).foregroundStyle(.secondary)
+                                } else {
+                                    Text("Backup in progress…").font(.caption).foregroundStyle(.secondary)
+                                }
+                            } else if let lastDate = tm.lastBackupDate {
+                                Text("Last backup: \(lastDate.formatted(date: .abbreviated, time: .shortened))")
+                                    .font(.caption).foregroundStyle(.secondary)
+                            } else {
+                                Text(tm.lastBackupUnavailableReason ?? "No successful backup found yet.")
+                                    .font(.caption).foregroundStyle(.secondary)
+                            }
+                        }
+                        Spacer()
+                    }
+                }
+            }
+        }
+    }
+
+    private func timeMachineLevel(_ tm: TimeMachineStatus) -> StatusLevel {
+        if tm.isRunning { return .good }
+        guard let last = tm.lastBackupDate else { return .bad }
+        let daysSince = Date().timeIntervalSince(last) / 86_400
+        if daysSince <= 1 { return .good }
+        if daysSince <= 7 { return .warning }
+        return .bad
+    }
+
+    private func loadTimeMachineStatus() {
+        DispatchQueue.global(qos: .utility).async {
+            let result = MacTimeMachineMonitor.currentStatus()
+            DispatchQueue.main.async {
+                timeMachineStatus = result
+                isLoadingTimeMachine = false
             }
         }
     }
