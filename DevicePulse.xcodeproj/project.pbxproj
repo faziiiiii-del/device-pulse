@@ -76,10 +76,12 @@
 		B122D9A4440F74B18A62EAA6 /* SecurityPersistenceScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90E7F00E08AB36AA416CEA18 /* SecurityPersistenceScanner.swift */; };
 		B267268A561A44EC50573AC0 /* MacNetworkDiagnostics.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4A5F362B4BB4B9DB09A8FE /* MacNetworkDiagnostics.swift */; };
 		B466C6844E66D63FC6365FD5 /* NetworkDiagnostics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8CCCF4AB2EB865B91C2619 /* NetworkDiagnostics.swift */; };
+		B514FAAD9BE748E9A707B829 /* MacDiskUtilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7848454E9F55163805AAF899 /* MacDiskUtilityView.swift */; };
 		B7B95EBC851163642BA7AC5F /* DiagnosticView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6EC2E23F0499B771BB0A49 /* DiagnosticView.swift */; };
 		B9C6D5DF3EFB2C49D821CBC9 /* LiveMonitorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1602A9DFF852C31F59367A1 /* LiveMonitorView.swift */; };
 		BA2A0436F505ABD1433362EB /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7594A94D5BB08570011B2CDF /* HomeView.swift */; };
 		C918531171DBDE88254CFD23 /* MoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C9048F0540D558E07ACCB3 /* MoreView.swift */; };
+		CA0A1D48AD6A90E7F4A3BC93 /* MacDiskUtilityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2E0C480DF007E5C1A289F4 /* MacDiskUtilityManager.swift */; };
 		CC0A207C06851860736F3D41 /* MacAlertMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8513F8ED48208A360FB7B04C /* MacAlertMonitor.swift */; };
 		CF137279F8D4432603AD4125 /* MacGPUMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E0848CB6B6BAD2AD80B7B71 /* MacGPUMonitor.swift */; };
 		CFECE99741808BA6FEBE6A0B /* MacUndoToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1936D11F4EDE90B450A753 /* MacUndoToast.swift */; };
@@ -125,8 +127,8 @@
 		2E0848CB6B6BAD2AD80B7B71 /* MacGPUMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacGPUMonitor.swift; sourceTree = "<group>"; };
 		2F60D747C7FB6FC2BD692353 /* StorageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageView.swift; sourceTree = "<group>"; };
 		30D5A61F4F1E5AB8D2E70E4B /* MacBatteryMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacBatteryMonitor.swift; sourceTree = "<group>"; };
-		311CD24B206C47B05CE8CA6B /* DevicePulse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DevicePulse.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		3134086C3E34235C4F83F959 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		311CD24B206C47B05CE8CA6B /* DevicePulse.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = DevicePulse.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3134086C3E34235C4F83F959 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		31369DD23B94327A9EA3EA80 /* MacAppUninstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacAppUninstaller.swift; sourceTree = "<group>"; };
 		35FCA297D7182B02C1E2C64D /* DevicePulseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicePulseApp.swift; sourceTree = "<group>"; };
 		3F065DD5F1E7090972CC1E5A /* DeviceInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
@@ -155,12 +157,14 @@
 		76C9D1C712163C3AB56ADCA0 /* MacProcessesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacProcessesView.swift; sourceTree = "<group>"; };
 		76FCFE2F543F2DDF6FA56784 /* SecurityQuarantineManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityQuarantineManager.swift; sourceTree = "<group>"; };
 		7773588182F177059D0F34D2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7848454E9F55163805AAF899 /* MacDiskUtilityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDiskUtilityView.swift; sourceTree = "<group>"; };
 		790CC6D59E8441F50C68A0E5 /* SnapshotsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotsView.swift; sourceTree = "<group>"; };
 		7D6EC2E23F0499B771BB0A49 /* DiagnosticView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticView.swift; sourceTree = "<group>"; };
 		8227DAF01826FCFEDAC3AE6B /* MacStorageBreakdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacStorageBreakdown.swift; sourceTree = "<group>"; };
 		8513F8ED48208A360FB7B04C /* MacAlertMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacAlertMonitor.swift; sourceTree = "<group>"; };
 		895C594B0B09BD12105F81BE /* MacMemoryOptimizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacMemoryOptimizer.swift; sourceTree = "<group>"; };
 		8AB4C325D2B62C5A32B09AC2 /* MacProcessMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacProcessMonitor.swift; sourceTree = "<group>"; };
+		8B2E0C480DF007E5C1A289F4 /* MacDiskUtilityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDiskUtilityManager.swift; sourceTree = "<group>"; };
 		90E7F00E08AB36AA416CEA18 /* SecurityPersistenceScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityPersistenceScanner.swift; sourceTree = "<group>"; };
 		91673926E66C8AF2C9045FF5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		91DB0F1621E10F7246B2E3D2 /* MacDiagnosticsEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDiagnosticsEngine.swift; sourceTree = "<group>"; };
@@ -196,7 +200,7 @@
 		EC8F2BA3B625975F8CC4B20D /* BatteryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryView.swift; sourceTree = "<group>"; };
 		F446FCA1816C817E07CF20FC /* MacComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacComponents.swift; sourceTree = "<group>"; };
 		F71FFFEA3F7333C4A0CE9647 /* MacDeviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDeviceView.swift; sourceTree = "<group>"; };
-		F820999029635E4D8E5FB4A8 /* Device Pulse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Device Pulse.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F820999029635E4D8E5FB4A8 /* DevicePulseMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DevicePulseMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8B24A50D30D16BE66B7315E /* ThermalMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThermalMonitor.swift; sourceTree = "<group>"; };
 		F8D727512B24AC9A8108070C /* MacTimeMachineMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacTimeMachineMonitor.swift; sourceTree = "<group>"; };
 		FD5DDA2F0EA75A46C81B1D3E /* NetworkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkView.swift; sourceTree = "<group>"; };
@@ -229,6 +233,7 @@
 				6142382211259BAAB4404452 /* MacDeviceMonitor.swift */,
 				91DB0F1621E10F7246B2E3D2 /* MacDiagnosticsEngine.swift */,
 				9DD62F1F96A2817342DB3C2A /* MacDiskHealthMonitor.swift */,
+				8B2E0C480DF007E5C1A289F4 /* MacDiskUtilityManager.swift */,
 				FE869E1B3A6F50F7CAC9A437 /* MacDuplicateScanner.swift */,
 				170E687F61E32C32AC592738 /* MacFileHasher.swift */,
 				2E0848CB6B6BAD2AD80B7B71 /* MacGPUMonitor.swift */,
@@ -268,7 +273,7 @@
 			isa = PBXGroup;
 			children = (
 				311CD24B206C47B05CE8CA6B /* DevicePulse.app */,
-				F820999029635E4D8E5FB4A8 /* Device Pulse.app */,
+				F820999029635E4D8E5FB4A8 /* DevicePulseMac.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -283,6 +288,7 @@
 				A9355367E48AC3910DD249DD /* MacCPUView.swift */,
 				2918EA22011BB71852EF449B /* MacDashboardView.swift */,
 				F71FFFEA3F7333C4A0CE9647 /* MacDeviceView.swift */,
+				7848454E9F55163805AAF899 /* MacDiskUtilityView.swift */,
 				29AE2D766317C15E13C1FDCC /* MacDuplicatesView.swift */,
 				23545501EAE4FCCA6AC774FB /* MacMaintenanceView.swift */,
 				0D6C5999F6CB6F194AC165E2 /* MacMemoryView.swift */,
@@ -382,7 +388,7 @@
 			packageProductDependencies = (
 			);
 			productName = DevicePulseMac;
-			productReference = F820999029635E4D8E5FB4A8 /* Device Pulse.app */;
+			productReference = F820999029635E4D8E5FB4A8 /* DevicePulseMac.app */;
 			productType = "com.apple.product-type.application";
 		};
 		E6BF4D58635D4F071FBA840C /* DevicePulse */ = {
@@ -410,7 +416,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 2700;
+				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					065C6CB1B072F14CC7F3EADD = {
 						DevelopmentTeam = TNXUTW58NH;
@@ -524,6 +530,8 @@
 				E04A789D706BF8580E976530 /* MacDeviceView.swift in Sources */,
 				32EC06F3B154746C41C3814D /* MacDiagnosticsEngine.swift in Sources */,
 				92BF4D5F43349A33DE5BD25C /* MacDiskHealthMonitor.swift in Sources */,
+				CA0A1D48AD6A90E7F4A3BC93 /* MacDiskUtilityManager.swift in Sources */,
+				B514FAAD9BE748E9A707B829 /* MacDiskUtilityView.swift in Sources */,
 				8E0348573BAA7C042694356D /* MacDuplicateScanner.swift in Sources */,
 				02565B9C4FEEDC0C92DC0704 /* MacDuplicatesView.swift in Sources */,
 				6627C65174115BCD691370E3 /* MacFileHasher.swift in Sources */,
@@ -606,9 +614,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = TNXUTW58NH;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -624,7 +630,6 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
@@ -639,6 +644,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = TNXUTW58NH;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Device Pulse";
@@ -649,12 +655,10 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				"INFOPLIST_KEY_UISupportedInterfaceOrientations~ipad" = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.faziii.devicepulse;
 				SDKROOT = iphoneos;
@@ -672,6 +676,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = TNXUTW58NH;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Device Pulse";
@@ -682,12 +687,10 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				"INFOPLIST_KEY_UISupportedInterfaceOrientations~ipad" = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.faziii.devicepulse;
 				SDKROOT = iphoneos;
@@ -731,9 +734,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = TNXUTW58NH;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -756,7 +757,6 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -771,17 +771,17 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = TNXUTW58NH;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Device Pulse";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.faziii.devicepulse.mac;
 				PRODUCT_NAME = "Device Pulse";
@@ -799,17 +799,17 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = TNXUTW58NH;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Device Pulse";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.faziii.devicepulse.mac;
 				PRODUCT_NAME = "Device Pulse";

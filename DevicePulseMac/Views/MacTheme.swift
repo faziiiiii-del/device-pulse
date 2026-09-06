@@ -21,6 +21,7 @@ extension MacSection {
         case .bigFiles: return .mint
         case .duplicates: return .cyan
         case .spaceMap: return .orange
+        case .diskUtility: return .teal
         case .uninstaller: return .pink
         case .maintenance: return .yellow
         case .device: return .gray

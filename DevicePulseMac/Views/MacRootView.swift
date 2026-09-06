@@ -19,6 +19,7 @@ enum MacSection: String, CaseIterable, Identifiable, Hashable {
     case bigFiles = "Big Files Finder"
     case duplicates = "Duplicate Finder"
     case spaceMap = "Space Map"
+    case diskUtility = "Disk Utility"
     case uninstaller = "Uninstaller"
     case maintenance = "Maintenance"
     case device = "Device"
@@ -48,6 +49,7 @@ enum MacSection: String, CaseIterable, Identifiable, Hashable {
         case .bigFiles: return "doc.text.magnifyingglass"
         case .duplicates: return "doc.on.doc"
         case .spaceMap: return "square.grid.3x3"
+        case .diskUtility: return "externaldrive.badge.plus"
         case .uninstaller: return "trash"
         case .maintenance: return "wrench.and.screwdriver"
         case .device: return "desktopcomputer"
@@ -69,7 +71,7 @@ enum MacSectionGroup: String, CaseIterable, Identifiable {
         switch self {
         case .care: return [.dashboard, .smartCare]
         case .monitor: return [.cpu, .memory, .network, .battery, .processes, .device, .security]
-        case .storage: return [.storage, .bigFiles, .duplicates, .spaceMap, .uninstaller, .maintenance]
+        case .storage: return [.storage, .bigFiles, .duplicates, .spaceMap, .diskUtility, .uninstaller, .maintenance]
         case .optimise: return [.ramOptimiser, .startupOptimiser]
         }
     }
@@ -152,6 +154,7 @@ struct MacRootView: View {
             case .bigFiles: MacBigFilesView()
             case .duplicates: MacDuplicatesView()
             case .spaceMap: MacSpaceMapView()
+            case .diskUtility: MacDiskUtilityView()
             case .uninstaller: MacUninstallerView()
             case .maintenance: MacMaintenanceView()
             case .device: MacDeviceView()
