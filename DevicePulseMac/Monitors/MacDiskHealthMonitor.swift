@@ -49,6 +49,12 @@ enum MacDiskHealthMonitor {
         return wholeDisks.compactMap { diskInfo(for: $0) }
     }
 
+    /// Single-disk SMART lookup, used by DiskDiscoveryService to fold health status into
+    /// Disk Utility's own listing without duplicating the Storage tab's scan logic.
+    static func smartStatus(forWholeDisk identifier: String) -> DiskSMARTStatus? {
+        diskInfo(for: identifier)?.smart
+    }
+
     private static func wholeDiskIdentifiers() -> [String]? {
         guard let data = run(["/usr/sbin/diskutil", "list", "-plist"]),
               let plist = try? PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? [String: Any],
