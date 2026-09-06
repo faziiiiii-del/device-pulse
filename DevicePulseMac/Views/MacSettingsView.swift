@@ -34,9 +34,16 @@ struct MacSettingsView: View {
 
             Section("General") {
                 Toggle("Launch Device Pulse at login", isOn: $launchAtLogin)
-                    .onChange(of: launchAtLogin) { _, newValue in setLaunchAtLogin(newValue) }
+                    // Deliberately still the single-parameter onChange(of:perform:), despite
+                    // the deprecation warning: the two-parameter form requires macOS 14.0+,
+                    // and this target's deployment target is 13.0 (project.yml). Confirmed
+                    // directly against a real Xcode build, not just the CLI toolchain used
+                    // for most of this project's verification — that build accepted the
+                    // newer form without complaint, which doesn't match this target's actual
+                    // minimum OS and would have shipped a real regression.
+                    .onChange(of: launchAtLogin, perform: setLaunchAtLogin)
                 Toggle("Menu bar only (hide Dock icon and window on launch)", isOn: $menuBarOnly)
-                    .onChange(of: menuBarOnly) { _, newValue in
+                    .onChange(of: menuBarOnly) { newValue in
                         NSApp.setActivationPolicy(newValue ? .accessory : .regular)
                     }
                 if let launchAtLoginError {
@@ -46,7 +53,7 @@ struct MacSettingsView: View {
 
             Section("Alerts") {
                 Toggle("Watch this Mac in the background", isOn: $alertsEnabled)
-                    .onChange(of: alertsEnabled) { _, newValue in MacAlertMonitor.shared.setEnabled(newValue) }
+                    .onChange(of: alertsEnabled) { newValue in MacAlertMonitor.shared.setEnabled(newValue) }
                 Text("Notifies you when: memory pressure is high (using macOS's own pressure signal, not just RAM %), storage falls below 10%, the battery finishes charging, CPU stays above 90% for 10 minutes, memory pressure is elevated AND a single process is unusually large, or a new login item appears. Each alert fires once when the condition starts. Turning this off fully stops the background checks — nothing keeps polling silently.")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
