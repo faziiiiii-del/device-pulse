@@ -118,12 +118,22 @@ enum DiskDiscoveryService {
     private static func plainVolumeInfo(for identifier: String) -> DiskVolumeInfo? {
         guard let plist = runPlist(["/usr/sbin/diskutil", "info", "-plist", identifier]) else { return nil }
         guard let name = plist["VolumeName"] as? String, !name.isEmpty else { return nil }
-        let size = (plist["Size"] as? NSNumber)?.int64Value
+        // `DiskVolumeInfo.sizeBytes` means "capacity in use" consistently across both
+        // volume kinds (matching APFS's CapacityInUse, which IS actual usage) — but
+        // diskutil's plain "Size" key is the volume's TOTAL capacity, not usage. Confirmed
+        // by direct inspection: passing raw Size here showed a volume as "used" ≈ its
+        // full size even when nearly empty, because Size and FreeSpace were nearly equal
+        // (an almost-empty card). For plain (non-APFS) volumes only — unlike APFS, where
+        // FreeSpace is unreliable/often reports 0, since space is shared at the container
+        // level rather than per-volume — Size and FreeSpace are both genuinely meaningful,
+        // so used = Size - FreeSpace is the real number.
+        let totalSize = (plist["Size"] as? NSNumber)?.int64Value
         let free = (plist["FreeSpace"] as? NSNumber)?.int64Value
+        let used: Int64? = (totalSize != nil && free != nil) ? max(totalSize! - free!, 0) : totalSize
         let encrypted = plist["Encryption"] as? Bool
         return DiskVolumeInfo(
             deviceIdentifier: identifier, name: name,
-            sizeBytes: size, freeBytes: free,
+            sizeBytes: used, freeBytes: free,
             filesystemName: plist["FilesystemUserVisibleName"] as? String ?? plist["FilesystemName"] as? String,
             mountPoint: (plist["MountPoint"] as? String).flatMap { $0.isEmpty ? nil : $0 },
             volumeUUID: (plist["VolumeUUID"] as? String).flatMap { $0.isEmpty ? nil : $0 },
