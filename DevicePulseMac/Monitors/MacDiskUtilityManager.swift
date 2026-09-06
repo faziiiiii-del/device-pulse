@@ -114,6 +114,25 @@ enum MacDiskUtilityManager {
 
         return allDisksAndPartitions.compactMap { diskDict in
             guard let deviceIdentifier = diskDict["DeviceIdentifier"] as? String else { return nil }
+            let info = diskDetails(for: deviceIdentifier)
+
+            // Skip "Virtual" whole-disk entries — the same signal MacDiskHealthMonitor
+            // already relies on, and for the same underlying reason: `diskutil list`
+            // includes both an APFS container's *own* whole-disk identifier (e.g. the
+            // container backing the internal SSD's real volumes) and any hdiutil-mounted
+            // disk image (Simulator runtime images, mounted .dmg installers, etc.) as
+            // separate top-level "WholeDisks" entries, alongside the real physical disk
+            // that actually hosts them. Both report VirtualOrPhysical == "Virtual" and
+            // MediaName inherited from whatever's underneath (confirmed by direct
+            // inspection: an APFS container inherits the real physical disk's own model
+            // name, e.g. "APPLE SSD AP1024R", not a distinct one) — without this filter
+            // they show up as confusing phantom "disks" with zero real partitions of
+            // their own, while a disk image mount (also Virtual) shows up as if it were
+            // a real external/removable drive worth formatting, which it never is. The
+            // container's actual volumes are already surfaced correctly through the real
+            // physical disk's GPT partition below, via `containersByPhysicalStore`.
+            guard info?.virtualOrPhysical != "Virtual" else { return nil }
+
             let rawPartitions = diskDict["Partitions"] as? [[String: Any]] ?? []
 
             var containsBoot = false
@@ -131,7 +150,6 @@ enum MacDiskUtilityManager {
                 return DiskPartitionInfo(deviceIdentifier: partID, content: content, sizeBytes: size, apfsVolumes: [], plainVolume: volume)
             }
 
-            let info = diskDetails(for: deviceIdentifier)
             return DiskInfo(
                 deviceIdentifier: deviceIdentifier,
                 mediaName: info?.mediaName ?? deviceIdentifier,
@@ -145,14 +163,15 @@ enum MacDiskUtilityManager {
         }
     }
 
-    private struct DiskDetails { let mediaName: String; let isInternal: Bool; let isRemovable: Bool }
+    private struct DiskDetails { let mediaName: String; let isInternal: Bool; let isRemovable: Bool; let virtualOrPhysical: String? }
 
     private static func diskDetails(for identifier: String) -> DiskDetails? {
         guard let plist = runPlist(["/usr/sbin/diskutil", "info", "-plist", identifier]) else { return nil }
         return DiskDetails(
             mediaName: plist["MediaName"] as? String ?? identifier,
             isInternal: plist["Internal"] as? Bool ?? true,
-            isRemovable: plist["RemovableMedia"] as? Bool ?? false
+            isRemovable: plist["RemovableMedia"] as? Bool ?? false,
+            virtualOrPhysical: plist["VirtualOrPhysical"] as? String
         )
     }
 
