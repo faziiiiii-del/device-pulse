@@ -46,7 +46,11 @@ final class SnapshotStore {
     private let queue = DispatchQueue(label: "com.devicedashboard.snapshotstore", qos: .utility)
 
     private init() {
-        let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        // `.documentDirectory` in `.userDomainMask` is effectively guaranteed non-empty on
+        // a real device, but falling back to the temp directory rather than force-
+        // unwrapping means a pathological case degrades to "snapshots don't persist
+        // across launches" instead of a crash at startup.
+        let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first ?? URL(fileURLWithPath: NSTemporaryDirectory())
         fileURL = dir.appendingPathComponent("snapshots.json")
     }
 

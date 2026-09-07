@@ -68,6 +68,12 @@ struct DiskVolumeInfo: Identifiable {
     let role: DiskVolumeRole
     let encryption: DiskEncryptionState
     let isBootVolume: Bool
+
+    /// A snapshot used to re-verify this exact volume is still the one the user selected,
+    /// immediately before a destructive action — see DiskIdentityValidator.revalidateVolume.
+    var fingerprint: DiskVolumeFingerprint {
+        DiskVolumeFingerprint(deviceIdentifier: deviceIdentifier, name: name, filesystemName: filesystemName, isBootVolume: isBootVolume)
+    }
 }
 
 struct DiskPartitionInfo: Identifiable {

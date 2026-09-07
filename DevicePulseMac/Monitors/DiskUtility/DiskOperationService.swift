@@ -126,9 +126,27 @@ enum DiskOperationService {
         throw DiskOperationError.bootDiskProtected(disk.mediaName)
     }
 
+    /// Volume-scoped equivalent of `assertNotBootDisk`, used by eraseVolume: a non-boot
+    /// volume can legitimately share a disk with the boot volume, so gating on the
+    /// *disk's* boot status here would over-block a safe operation, not just under-block
+    /// an unsafe one — this checks the specific volume instead.
+    static func assertNotBootVolume(_ volume: DiskVolumeInfo) throws {
+        guard volume.isBootVolume else { return }
+        throw DiskOperationError.bootDiskProtected(volume.name)
+    }
+
     /// Re-enumerates the disk fresh and confirms it still matches what the user selected.
     static func revalidateOrThrow(_ disk: DiskInfo) async throws {
         switch await DiskIdentityValidator.revalidate(disk.fingerprint) {
+        case .verified: return
+        case .disappeared: throw DiskOperationError.diskDisappeared
+        case .mismatch(let reason): throw DiskOperationError.identityMismatch(reason)
+        }
+    }
+
+    /// Volume-scoped equivalent of `revalidateOrThrow`.
+    static func revalidateVolumeOrThrow(_ volume: DiskVolumeInfo) async throws {
+        switch await DiskIdentityValidator.revalidateVolume(volume.fingerprint) {
         case .verified: return
         case .disappeared: throw DiskOperationError.diskDisappeared
         case .mismatch(let reason): throw DiskOperationError.identityMismatch(reason)
@@ -158,19 +176,28 @@ enum DiskOperationService {
         }
     }
 
-    static func eraseVolume(deviceIdentifier: String, volumeName: String, newName: String, format: MacDiskFormat, passphrase: String?, handle: DiskOperationHandle) async {
-        await run(handle: handle, target: deviceIdentifier, targetName: volumeName) {
-            handle.setStage(.executing); handle.beginStep(0)
-            let result = try await runProcess(["/usr/sbin/diskutil", "eraseVolume", format.diskutilName, newName, deviceIdentifier], handle: handle)
-            guard result.succeeded else { handle.finishStep(0, ok: false); throw DiskOperationServiceRunError.diskutilFailed(result.output) }
+    static func eraseVolume(_ volume: DiskVolumeInfo, newName: String, format: MacDiskFormat, passphrase: String?, handle: DiskOperationHandle) async {
+        await run(handle: handle, target: volume.deviceIdentifier, targetName: volume.name) {
+            try assertNotBootVolume(volume)
+            handle.setStage(.validating); handle.beginStep(0)
+            try await revalidateVolumeOrThrow(volume)
             handle.finishStep(0, ok: true)
 
+            handle.setStage(.executing); handle.beginStep(1)
+            let result = try await runProcess(["/usr/sbin/diskutil", "eraseVolume", format.diskutilName, newName, volume.deviceIdentifier], handle: handle)
+            guard result.succeeded else { handle.finishStep(1, ok: false); throw DiskOperationServiceRunError.diskutilFailed(result.output) }
+            handle.finishStep(1, ok: true)
+
             if format.needsPassphrase, let passphrase {
-                handle.beginStep(1)
-                try await encryptNewlyCreatedVolume(onDisk: deviceIdentifier, passphrase: passphrase, handle: handle, exactVolumeReplacing: deviceIdentifier)
-                handle.finishStep(1, ok: true)
+                handle.beginStep(2)
+                // eraseVolume reformats in place, so diskutil reuses the same volume
+                // device identifier — passing it as the exact target to match against,
+                // rather than assuming the disk's first volume (which isn't necessarily
+                // the one just erased on a multi-volume disk).
+                try await encryptNewlyCreatedVolume(onDisk: volume.deviceIdentifier, exactVolumeReplacing: volume.deviceIdentifier, passphrase: passphrase, handle: handle)
+                handle.finishStep(2, ok: true)
             }
-            return "Erased \u{201C}\(volumeName)\u{201D} as \(format.displayName)."
+            return "Erased \u{201C}\(volume.name)\u{201D} as \(format.displayName)."
         }
     }
 
@@ -270,10 +297,16 @@ enum DiskOperationService {
     /// Finds the single volume `diskutil eraseDisk`/`eraseVolume` just created on the
     /// given disk and encrypts it, piping the passphrase via stdin — never as a CLI
     /// argument (visible to any process via `ps aux`), never stored by this app.
-    private static func encryptNewlyCreatedVolume(onDisk deviceIdentifier: String, passphrase: String, handle: DiskOperationHandle, exactVolumeReplacing: String? = nil) async throws {
+    private static func encryptNewlyCreatedVolume(onDisk deviceIdentifier: String, exactVolumeReplacing: String? = nil, passphrase: String, handle: DiskOperationHandle) async throws {
         let disks = await Task.detached { DiskDiscoveryService.listDisks() }.value
         let targetDisk = disks.first { $0.deviceIdentifier == deviceIdentifier || $0.partitions.contains { $0.deviceIdentifier == deviceIdentifier } }
-        guard let volume = targetDisk?.allVolumes.first else {
+        let candidates = targetDisk?.allVolumes ?? []
+        // When erasing one specific existing volume in place, diskutil reuses that same
+        // device identifier for the reformatted result — match on it exactly rather than
+        // assuming "first volume on the disk", which isn't necessarily the one just
+        // erased when the disk has more than one volume.
+        let volume = exactVolumeReplacing.flatMap { id in candidates.first { $0.deviceIdentifier == id } } ?? candidates.first
+        guard let volume else {
             throw DiskOperationServiceRunError.custom("Erased successfully, but the new volume could not be found to encrypt it. Encrypt it manually from Disk Utility.")
         }
         let result = try await runProcess(
@@ -368,14 +401,46 @@ enum DiskOperationService {
             task.terminationHandler = { proc in
                 outPipe.fileHandleForReading.readabilityHandler = nil
                 errPipe.fileHandleForReading.readabilityHandler = nil
-                Task { @MainActor in handle.currentProcess = nil }
+                // Any bytes written by the process but not yet delivered to the
+                // readability handler at the exact moment it exits would otherwise be
+                // silently dropped — drain both pipes directly before resuming, since
+                // this output feeds error translation, and a truncated message would be
+                // actively misleading rather than merely incomplete.
+                let remainingOut = outPipe.fileHandleForReading.readDataToEndOfFile()
+                let remainingErr = errPipe.fileHandleForReading.readDataToEndOfFile()
+                if let text = String(data: remainingOut, encoding: .utf8), !text.isEmpty { accumulator.append(text) }
+                if let text = String(data: remainingErr, encoding: .utf8), !text.isEmpty { accumulator.append(text) }
                 let succeeded = proc.terminationStatus == 0
-                continuation.resume(returning: ProcessResult(succeeded: succeeded, output: accumulator.value.trimmingCharacters(in: .whitespacesAndNewlines)))
+                let output = accumulator.value.trimmingCharacters(in: .whitespacesAndNewlines)
+                Task { @MainActor in
+                    // A cancelled process is terminated with a signal, which exits
+                    // non-zero — read as a genuine diskutil failure, that showed up in
+                    // the audit log as e.g. "Terminated: 15" rather than "Cancelled".
+                    // Check cancelRequested (only safely readable on MainActor) before
+                    // deciding which way to resume.
+                    let wasCancelled = handle.cancelRequested
+                    handle.currentProcess = nil
+                    if wasCancelled {
+                        continuation.resume(throwing: CancellationError())
+                    } else {
+                        continuation.resume(returning: ProcessResult(succeeded: succeeded, output: output))
+                    }
+                }
             }
 
             do {
                 try task.run()
-                Task { @MainActor in handle.currentProcess = task }
+                // Set synchronously, not via a Task hop — a cancel() call in the gap
+                // before an async hop actually runs would find currentProcess still nil
+                // and silently do nothing. This function's closure runs on the MainActor
+                // already (DiskOperationService is @MainActor), so this is safe to do
+                // directly. The explicit recheck immediately below closes the remaining
+                // sliver of a race: if cancel() was requested on a previous run loop
+                // turn between this function being entered and task.run() completing.
+                handle.currentProcess = task
+                if handle.cancelRequested {
+                    task.terminate()
+                }
                 if let stdinText, let stdinPipe = task.standardInput as? Pipe {
                     let handle = stdinPipe.fileHandleForWriting
                     handle.write(Data((stdinText + "\n").utf8))

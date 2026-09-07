@@ -32,7 +32,11 @@ final class HistoryStore {
     private let minInterval: TimeInterval = 5 * 60
 
     private init() {
-        let dir = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+        // `.applicationSupportDirectory` in `.userDomainMask` is effectively guaranteed
+        // non-empty on a real device, but falling back to the temp directory rather than
+        // force-unwrapping means a pathological case degrades to "history doesn't persist
+        // across launches" instead of a crash at startup.
+        let dir = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first ?? URL(fileURLWithPath: NSTemporaryDirectory())
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         fileURL = dir.appendingPathComponent("history.json")
     }

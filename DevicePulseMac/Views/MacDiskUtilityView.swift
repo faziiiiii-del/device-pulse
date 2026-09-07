@@ -167,7 +167,6 @@ struct MacDiskUtilityView: View {
 
 // MARK: - Disk detail sheet
 
-private struct EraseVolumeTarget: Identifiable { let id: String; let name: String; let currentFormat: String? }
 private struct VolumeActionTarget: Identifiable { let id: String; let name: String; let mountPoint: String? }
 
 private struct MacDiskDetailSheet: View {
@@ -177,7 +176,7 @@ private struct MacDiskDetailSheet: View {
 
     @State private var pendingEraseDisk = false
     @State private var pendingPartition = false
-    @State private var pendingEraseVolume: EraseVolumeTarget?
+    @State private var pendingEraseVolume: DiskVolumeInfo?
     @State private var pendingRename: VolumeActionTarget?
     @State private var operationHandle: DiskOperationHandle?
     @State private var showAdvancedInfo = false
@@ -253,11 +252,11 @@ private struct MacDiskDetailSheet: View {
             MacFormatConfirmSheet(
                 title: "Erase Volume",
                 targetName: target.name,
-                targetDeviceID: target.id,
-                warning: "This destroys all data on \u{201C}\(target.name)\u{201D} (\(target.id)), permanently. Other partitions on this disk are not affected.",
+                targetDeviceID: target.deviceIdentifier,
+                warning: "This destroys all data on \u{201C}\(target.name)\u{201D} (\(target.deviceIdentifier)), permanently. Other partitions on this disk are not affected.",
                 onConfirm: { newName, format, passphrase in
-                    startOperation(title: "Erase Volume", plannedSteps: format.needsPassphrase ? ["Erase volume", "Encrypt new volume"] : ["Erase volume"]) { handle in
-                        await DiskOperationService.eraseVolume(deviceIdentifier: target.id, volumeName: target.name, newName: newName, format: format, passphrase: passphrase, handle: handle)
+                    startOperation(title: "Erase Volume", plannedSteps: format.needsPassphrase ? ["Validate volume identity", "Erase volume", "Encrypt new volume"] : ["Validate volume identity", "Erase volume"]) { handle in
+                        await DiskOperationService.eraseVolume(target, newName: newName, format: format, passphrase: passphrase, handle: handle)
                     }
                 }
             )
@@ -349,7 +348,7 @@ private struct MacDiskDetailSheet: View {
                         } }.buttonStyle(.bordered).controlSize(.small)
                         Button("Rename") { pendingRename = VolumeActionTarget(id: volume.deviceIdentifier, name: volume.name, mountPoint: volume.mountPoint) }
                             .buttonStyle(.bordered).controlSize(.small)
-                        Button("Erase…", role: .destructive) { pendingEraseVolume = EraseVolumeTarget(id: volume.deviceIdentifier, name: volume.name, currentFormat: volume.filesystemName) }
+                        Button("Erase…", role: .destructive) { pendingEraseVolume = volume }
                             .buttonStyle(.bordered).controlSize(.small)
                     }
                 }

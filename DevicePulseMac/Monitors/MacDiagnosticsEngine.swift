@@ -75,10 +75,10 @@ enum MacDiagnosticsEngine {
         // Point-in-time synchronous read using getifaddrs presence as a proxy;
         // the live NWPathMonitor-backed state is shown on the Network tab.
         let addresses = MacNetworkMonitor.localIPAddresses()
-        if addresses.isEmpty {
+        guard let first = addresses.first else {
             return DiagnosticCheck(name: "Network", status: .warning, detail: "No active network interface with an IPv4 address found.")
         }
-        return DiagnosticCheck(name: "Network", status: .pass, detail: "Active interface: \(addresses.first!.interface) (\(addresses.first!.address)).")
+        return DiagnosticCheck(name: "Network", status: .pass, detail: "Active interface: \(first.interface) (\(first.address)).")
     }
 
     static func batteryCheck() -> DiagnosticCheck {

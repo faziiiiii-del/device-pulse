@@ -155,8 +155,8 @@ struct MacBatteryView: View {
 
         // Reset the trend whenever charging state flips, so plugging in
         // doesn't get averaged into a discharge measurement.
-        if let previous = samples.dropLast().last, previous.isCharging != info.isCharging {
-            samples = [samples.last!]
+        if let previous = samples.dropLast().last, previous.isCharging != info.isCharging, let mostRecent = samples.last {
+            samples = [mostRecent]
         }
         if samples.count > maxSamples {
             samples.removeFirst(samples.count - maxSamples)

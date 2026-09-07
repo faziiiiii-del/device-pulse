@@ -38,15 +38,38 @@ enum NetworkDiagnostics {
         var publicIP: String?
     }
 
-    static func resolveDNS(host: String = "www.apple.com") async -> (success: Bool, ms: Double?) {
+    /// `CFHostStartInfoResolution` is a synchronous, blocking call with no timeout of its
+    /// own — if the resolver stalls (bad network, DNS blackhole), it can block
+    /// indefinitely, which would hang this `async` call forever. Bounded here the same
+    /// way `tcpLatency` below bounds its own blocking wait: a timeout fires on a separate
+    /// queue, guarded against a double-resume race with the real completion via the same
+    /// NSLock pattern (both can fire close together if resolution completes right as the
+    /// timeout does). `CFHostCancelInfoResolution` actively interrupts the in-flight
+    /// resolution on timeout, rather than merely abandoning a background thread that
+    /// stays blocked until the OS's own (potentially much longer) resolver timeout.
+    static func resolveDNS(host: String = "www.apple.com", timeout: TimeInterval = 5) async -> (success: Bool, ms: Double?) {
         await withCheckedContinuation { continuation in
+            let cfHost = CFHostCreateWithName(nil, host as CFString).takeRetainedValue()
+            let start = Date()
+            let resumeLock = NSLock()
+            var didResume = false
+            let resumeOnce: (Bool, Double?) -> Void = { success, ms in
+                resumeLock.lock()
+                let alreadyResumed = didResume
+                didResume = true
+                resumeLock.unlock()
+                guard !alreadyResumed else { return }
+                continuation.resume(returning: (success, ms))
+            }
             DispatchQueue.global(qos: .userInitiated).async {
-                let cfHost = CFHostCreateWithName(nil, host as CFString).takeRetainedValue()
-                let start = Date()
                 var error = CFStreamError()
                 let ok = CFHostStartInfoResolution(cfHost, .addresses, &error)
                 let elapsedMs = Date().timeIntervalSince(start) * 1000
-                continuation.resume(returning: (ok && error.error == 0, ok ? elapsedMs : nil))
+                resumeOnce(ok && error.error == 0, ok ? elapsedMs : nil)
+            }
+            DispatchQueue.global().asyncAfter(deadline: .now() + timeout) {
+                CFHostCancelInfoResolution(cfHost, .addresses)
+                resumeOnce(false, nil)
             }
         }
     }
