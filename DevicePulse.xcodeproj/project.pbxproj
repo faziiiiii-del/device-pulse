@@ -39,6 +39,7 @@
 		44BBBF81FD64610EC41F5F1B /* MacThermalMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635293B1D0FAFDB58AB40A33 /* MacThermalMonitor.swift */; };
 		45121DD505686D30B6660464 /* MacSmartCareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557242694FE19C762A2FBF31 /* MacSmartCareView.swift */; };
 		45C3E51D24D44ECF9C91F11E /* DiagnosticsEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A398B57496DE84E3DC46DE8 /* DiagnosticsEngine.swift */; };
+		4A686FF6DA4F5F53BF2D9ECB /* MacBluetoothMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A652BA7458C6FA8C5F2AADA /* MacBluetoothMonitor.swift */; };
 		5052954776D255A3FA9F1422 /* StorageMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FAD4A3EB4B516F56C5DEB02 /* StorageMonitor.swift */; };
 		5156097E86058D095CF8D88C /* BatteryMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CD9EA299EAEA567EF0507E /* BatteryMonitor.swift */; };
 		51F82AB4C8B3165EDDDA8F1D /* MacStorageScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 666B31B0282D251793A6F0E0 /* MacStorageScanner.swift */; };
@@ -124,6 +125,7 @@
 		1963FB6E97D52FB459E2E3DC /* MemoryPressureMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryPressureMonitor.swift; sourceTree = "<group>"; };
 		1A398B57496DE84E3DC46DE8 /* DiagnosticsEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticsEngine.swift; sourceTree = "<group>"; };
 		1A4D2BC6CBD2D3947389ADD3 /* SecurityScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityScanner.swift; sourceTree = "<group>"; };
+		1A652BA7458C6FA8C5F2AADA /* MacBluetoothMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacBluetoothMonitor.swift; sourceTree = "<group>"; };
 		1D8CCCF4AB2EB865B91C2619 /* NetworkDiagnostics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkDiagnostics.swift; sourceTree = "<group>"; };
 		1FE63454D8DA326DF12ACE59 /* DiagnosticModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticModels.swift; sourceTree = "<group>"; };
 		225E105C72B8D61833360CDD /* PhotoLibraryMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibraryMonitor.swift; sourceTree = "<group>"; };
@@ -252,6 +254,7 @@
 				31369DD23B94327A9EA3EA80 /* MacAppUninstaller.swift */,
 				30D5A61F4F1E5AB8D2E70E4B /* MacBatteryMonitor.swift */,
 				459442497A1CE5BCB08AAD10 /* MacBigFilesScanner.swift */,
+				1A652BA7458C6FA8C5F2AADA /* MacBluetoothMonitor.swift */,
 				E4B841160780DF4F8EDEBF45 /* MacCPUMonitor.swift */,
 				6142382211259BAAB4404452 /* MacDeviceMonitor.swift */,
 				91DB0F1621E10F7246B2E3D2 /* MacDiagnosticsEngine.swift */,
@@ -551,6 +554,7 @@
 				2ACF432E33D25B1B3F72DA3D /* MacBatteryView.swift in Sources */,
 				420AB9AE7AB088DF0B59BA45 /* MacBigFilesScanner.swift in Sources */,
 				E6AF0B763510D787F6BCD72A /* MacBigFilesView.swift in Sources */,
+				4A686FF6DA4F5F53BF2D9ECB /* MacBluetoothMonitor.swift in Sources */,
 				AB6163E1774E75FB0995411E /* MacCPUMonitor.swift in Sources */,
 				82BD648C433B898C4A5CEDF1 /* MacCPUView.swift in Sources */,
 				E7ADE730915179318A27853F /* MacComponents.swift in Sources */,
