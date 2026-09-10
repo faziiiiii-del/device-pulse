@@ -9,6 +9,7 @@
 import SwiftUI
 import AppKit
 import ServiceManagement
+import UniformTypeIdentifiers
 
 struct MacSettingsView: View {
     @AppStorage("refreshIntervalSeconds") private var refreshInterval: Double = 3
@@ -17,6 +18,8 @@ struct MacSettingsView: View {
     @AppStorage("menuBarOnlyMode") private var menuBarOnly: Bool = false
     @AppStorage(AppTheme.storageKey) private var appThemeRaw: String = AppTheme.classic.rawValue
     @State private var launchAtLoginError: String?
+    @State private var isExportingReport = false
+    @State private var reportExportMessage: String?
 
     var body: some View {
         Form {
@@ -88,6 +91,26 @@ struct MacSettingsView: View {
                 .buttonStyle(.bordered)
             }
 
+            Section("Diagnostics") {
+                Text("Save everything Device Pulse can currently read — system info, diagnostic checks, volumes, battery, network, Bluetooth, startup items and recent crash reports — as one plain-text file to hand to IT or attach to a support thread. Nothing is uploaded; only what the app already shows on screen goes into the file.")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                Button {
+                    exportDiagnosticsReport()
+                } label: {
+                    if isExportingReport {
+                        HStack(spacing: 6) { ProgressView().controlSize(.small); Text("Gathering…") }
+                    } else {
+                        Label("Export Diagnostics Report…", systemImage: "square.and.arrow.up")
+                    }
+                }
+                .buttonStyle(.bordered)
+                .disabled(isExportingReport)
+                if let reportExportMessage {
+                    Text(reportExportMessage).font(.caption).foregroundStyle(.secondary)
+                }
+            }
+
             Section("About") {
                 Text("Device Pulse for Mac reads only what macOS exposes through public APIs. Nothing is uploaded anywhere except network tests you explicitly run (which contact speed.cloudflare.com / your DNS resolver). No private APIs, no App Store review constraints assumed — this is a personal utility.")
                     .font(.caption)
@@ -101,6 +124,30 @@ struct MacSettingsView: View {
     private var hasFullDiskAccessHint: String {
         let path = NSHomeDirectory() + "/Library/Mail"
         return FileManager.default.isReadableFile(atPath: path) ? "Likely Granted" : "Not Granted (or nothing to check)"
+    }
+
+    private func exportDiagnosticsReport() {
+        isExportingReport = true
+        reportExportMessage = nil
+        DispatchQueue.global(qos: .userInitiated).async {
+            let text = MacDiagnosticsReport.build()
+            DispatchQueue.main.async {
+                isExportingReport = false
+                let panel = NSSavePanel()
+                panel.nameFieldStringValue = MacDiagnosticsReport.suggestedFileName()
+                panel.allowedContentTypes = [.plainText]
+                panel.canCreateDirectories = true
+                panel.title = "Save Diagnostics Report"
+                guard panel.runModal() == .OK, let url = panel.url else { return }
+                do {
+                    try text.write(to: url, atomically: true, encoding: .utf8)
+                    reportExportMessage = "Saved to \(url.lastPathComponent)."
+                    NSWorkspace.shared.activateFileViewerSelecting([url])
+                } catch {
+                    reportExportMessage = "Couldn't save: \(error.localizedDescription)"
+                }
+            }
+        }
     }
 
     private func setLaunchAtLogin(_ enabled: Bool) {

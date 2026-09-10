@@ -73,6 +73,7 @@
 		92BF4D5F43349A33DE5BD25C /* MacDiskHealthMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD62F1F96A2817342DB3C2A /* MacDiskHealthMonitor.swift */; };
 		959351A58971F5E7E80B4808 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 3134086C3E34235C4F83F959 /* PrivacyInfo.xcprivacy */; };
 		95D000D4CF46B49F93A4FC36 /* SecurityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0336AC61FD60EF34079EFFDE /* SecurityView.swift */; };
+		9B9718F1F60823A198B6F57C /* MacDiagnosticsReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = C197DDB2E25A208DE175C526 /* MacDiagnosticsReport.swift */; };
 		9CA869E5C65BA75A7CD63B2D /* DiskUtilityModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325775A4774CA62EBF3481A6 /* DiskUtilityModels.swift */; };
 		A19CB9B54F378779A13FF90E /* SecurityQuarantineManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FCFE2F543F2DDF6FA56784 /* SecurityQuarantineManager.swift */; };
 		A3E5BF558E1319444B58DD4E /* StatusUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0672319914105A55F904BC /* StatusUI.swift */; };
@@ -197,6 +198,7 @@
 		BAA1BD881404881766A197EF /* MacStorageMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacStorageMonitor.swift; sourceTree = "<group>"; };
 		BB4247BC98C6C0F691B46A72 /* MemoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryView.swift; sourceTree = "<group>"; };
 		BD7856F339F1A86FEB0B9B06 /* InvestigateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvestigateView.swift; sourceTree = "<group>"; };
+		C197DDB2E25A208DE175C526 /* MacDiagnosticsReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDiagnosticsReport.swift; sourceTree = "<group>"; };
 		C1AFCC39A6A39FD927F5FCD0 /* MacWiFiNetworksMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacWiFiNetworksMonitor.swift; sourceTree = "<group>"; };
 		C26EDC956D90C897867B771C /* DiskDiscoveryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskDiscoveryService.swift; sourceTree = "<group>"; };
 		C36A21DF802A1C3AA7CF958C /* MacMemoryMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacMemoryMonitor.swift; sourceTree = "<group>"; };
@@ -265,6 +267,7 @@
 				808F5EB01444CF1AF781E1E4 /* MacCrashReportMonitor.swift */,
 				6142382211259BAAB4404452 /* MacDeviceMonitor.swift */,
 				91DB0F1621E10F7246B2E3D2 /* MacDiagnosticsEngine.swift */,
+				C197DDB2E25A208DE175C526 /* MacDiagnosticsReport.swift */,
 				9DD62F1F96A2817342DB3C2A /* MacDiskHealthMonitor.swift */,
 				FE869E1B3A6F50F7CAC9A437 /* MacDuplicateScanner.swift */,
 				170E687F61E32C32AC592738 /* MacFileHasher.swift */,
@@ -573,6 +576,7 @@
 				F872E06B62934FFEA37F4B2F /* MacDeviceMonitor.swift in Sources */,
 				E04A789D706BF8580E976530 /* MacDeviceView.swift in Sources */,
 				32EC06F3B154746C41C3814D /* MacDiagnosticsEngine.swift in Sources */,
+				9B9718F1F60823A198B6F57C /* MacDiagnosticsReport.swift in Sources */,
 				92BF4D5F43349A33DE5BD25C /* MacDiskHealthMonitor.swift in Sources */,
 				B514FAAD9BE748E9A707B829 /* MacDiskUtilityView.swift in Sources */,
 				8E0348573BAA7C042694356D /* MacDuplicateScanner.swift in Sources */,
