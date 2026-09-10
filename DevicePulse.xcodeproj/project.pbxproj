@@ -17,6 +17,7 @@
 		1976FC6610A3768E3F9CA6E3 /* MacStartupMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB3A290F4E28C2DCFDA16B3 /* MacStartupMonitor.swift */; };
 		1A9F6DB7E824B510DE632833 /* MacStorageCategoryScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247305412606B8280764A746 /* MacStorageCategoryScanner.swift */; };
 		1B7B01D9FC5F98F52BC59F39 /* ThermalMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B24A50D30D16BE66B7315E /* ThermalMonitor.swift */; };
+		1C22BEE17A601BE1326A2203 /* MacWiFiInfoMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBB59FB5E186AE0C910EAC69 /* MacWiFiInfoMonitor.swift */; };
 		1F04B2B6F9ED90B7160D2479 /* MacSpaceMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD928AA7CE50D8547EAE3382 /* MacSpaceMapView.swift */; };
 		231CFFBF5F2941902E856527 /* Benchmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD3E27CB01581A132121EB4 /* Benchmarks.swift */; };
 		240393D7B33C7E4540270617 /* SecurityCodeSigningScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A964B2CE3A5FF33EC2C91CA5 /* SecurityCodeSigningScanner.swift */; };
@@ -198,6 +199,7 @@
 		C7CD9EA299EAEA567EF0507E /* BatteryMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryMonitor.swift; sourceTree = "<group>"; };
 		C992B2BD2E715EE7BAC6365E /* SnapshotStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotStore.swift; sourceTree = "<group>"; };
 		C99B614B5312C1700CCC95C2 /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
+		CBB59FB5E186AE0C910EAC69 /* MacWiFiInfoMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacWiFiInfoMonitor.swift; sourceTree = "<group>"; };
 		CCD3E27CB01581A132121EB4 /* Benchmarks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Benchmarks.swift; sourceTree = "<group>"; };
 		CCE65BA5C98F444D7718C651 /* MacBatteryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacBatteryView.swift; sourceTree = "<group>"; };
 		CD4A5F362B4BB4B9DB09A8FE /* MacNetworkDiagnostics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacNetworkDiagnostics.swift; sourceTree = "<group>"; };
@@ -274,6 +276,7 @@
 				635293B1D0FAFDB58AB40A33 /* MacThermalMonitor.swift */,
 				F8D727512B24AC9A8108070C /* MacTimeMachineMonitor.swift */,
 				B50BB03DEA2B58A2281F0D72 /* MacTrashUndo.swift */,
+				CBB59FB5E186AE0C910EAC69 /* MacWiFiInfoMonitor.swift */,
 				C1AFCC39A6A39FD927F5FCD0 /* MacWiFiNetworksMonitor.swift */,
 				4E27AB2F903CA17A05937DB7 /* Treemap.swift */,
 				2EB364AEC543C39D7EE65C9C /* DiskUtility */,
@@ -596,6 +599,7 @@
 				7644E701379C1064644F8818 /* MacTrashUndo.swift in Sources */,
 				CFECE99741808BA6FEBE6A0B /* MacUndoToast.swift in Sources */,
 				2E006527A6E541F73B950290 /* MacUninstallerView.swift in Sources */,
+				1C22BEE17A601BE1326A2203 /* MacWiFiInfoMonitor.swift in Sources */,
 				650D8D3E010EC8CDCAC6E59A /* MacWiFiNetworksMonitor.swift in Sources */,
 				240393D7B33C7E4540270617 /* SecurityCodeSigningScanner.swift in Sources */,
 				FD1AD9C39C43EF5C8750EB4E /* SecurityEngine.swift in Sources */,

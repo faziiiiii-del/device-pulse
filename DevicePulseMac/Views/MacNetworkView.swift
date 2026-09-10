@@ -17,6 +17,9 @@ struct MacNetworkView: View {
     @State private var isLoadingSavedNetworks = true
     @State private var pendingForget: SavedWiFiNetwork?
 
+    @State private var wifiInfo: WiFiConnectionInfo?
+    @State private var wifiChecked = false
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
@@ -43,6 +46,17 @@ struct MacNetworkView: View {
                     } else {
                         ForEach(addresses, id: \.address) { entry in
                             MacInfoRow(label: entry.interface, value: entry.address)
+                        }
+                    }
+                }
+
+                if wifiChecked {
+                    if let wifiInfo {
+                        currentWiFiCard(wifiInfo)
+                    } else if network.connectionType.localizedCaseInsensitiveContains("wi-fi") {
+                        MacCard(title: "Current Wi-Fi", systemImage: "wifi", tint: MacSection.network.tint) {
+                            Text("Connected to Wi-Fi, but macOS didn't return live signal details for the interface.")
+                                .font(.caption).foregroundStyle(.secondary)
                         }
                     }
                 }
@@ -112,7 +126,10 @@ struct MacNetworkView: View {
             }
             .padding(24)
         }
-        .onAppear(perform: loadSavedNetworks)
+        .onAppear {
+            loadSavedNetworks()
+            loadWiFiInfo()
+        }
         .alert(
             pendingForget.map { "Forget \($0.ssid)?" } ?? "",
             isPresented: Binding(get: { pendingForget != nil }, set: { if !$0 { pendingForget = nil } })
@@ -124,6 +141,68 @@ struct MacNetworkView: View {
             }
         } message: {
             Text("This Mac will no longer auto-join this network — you'd need to enter its password again to reconnect. This doesn't affect the network itself, only this Mac's memory of it.")
+        }
+    }
+
+    @ViewBuilder
+    private func currentWiFiCard(_ info: WiFiConnectionInfo) -> some View {
+        MacCard(title: "Current Wi-Fi", systemImage: "wifi", tint: MacSection.network.tint) {
+            if let ssid = info.ssid {
+                MacInfoRow(label: "Network", value: ssid)
+            } else if info.ssidRedacted {
+                MacInfoRow(label: "Network", value: "Hidden by macOS")
+            }
+
+            if let fraction = info.signalFraction, let rssi = info.rssiDbm {
+                MacUsageBar(
+                    usedLabel: "\(rssi) dBm",
+                    totalLabel: info.signalQuality,
+                    fraction: fraction,
+                    tint: MacSection.network.tint
+                )
+            }
+
+            if let noise = info.noiseDbm {
+                MacInfoRow(label: "Noise", value: "\(noise) dBm")
+            }
+            if let snr = info.snrDb {
+                MacInfoRow(label: "Signal-to-Noise", value: "\(snr) dB")
+            }
+            if info.channel != nil {
+                MacInfoRow(label: "Channel", value: channelText(info))
+            }
+            if let phy = info.phyMode {
+                MacInfoRow(label: "Standard", value: phy)
+            }
+            if let rate = info.txRateMbps {
+                MacInfoRow(label: "Negotiated Rate", value: "\(rate) Mbps")
+            }
+            if let security = info.security {
+                MacInfoRow(label: "Security", value: security)
+            }
+            if let country = info.countryCode {
+                MacInfoRow(label: "Country Code", value: country)
+            }
+
+            Text("Live values for the network you're on now, read via system_profiler (System Report ▸ Wi-Fi). Negotiated rate is the PHY link rate, not real throughput — run the connection test below for that. If the network name shows as hidden, grant Location access in System Settings ▸ Privacy & Security to reveal it.")
+                .font(.caption2).foregroundStyle(.secondary)
+        }
+    }
+
+    private func channelText(_ info: WiFiConnectionInfo) -> String {
+        var text = info.channel.map(String.init) ?? "—"
+        if let band = info.band { text += " · \(band)" }
+        if let width = info.channelWidthMHz { text += " · \(width) MHz" }
+        return text
+    }
+
+    private func loadWiFiInfo() {
+        DispatchQueue.global(qos: .utility).async {
+            let found = MacWiFiInfoMonitor.current()
+            DispatchQueue.main.async {
+                wifiInfo = found
+                wifiChecked = true
+            }
         }
     }
 
