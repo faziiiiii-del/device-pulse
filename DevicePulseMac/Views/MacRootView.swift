@@ -15,6 +15,7 @@ enum MacSection: String, CaseIterable, Identifiable, Hashable {
     case network = "Network"
     case battery = "Battery"
     case processes = "Processes"
+    case crashReports = "Crash Reports"
     case startupOptimiser = "Startup Optimiser"
     case bigFiles = "Big Files Finder"
     case duplicates = "Duplicate Finder"
@@ -45,6 +46,7 @@ enum MacSection: String, CaseIterable, Identifiable, Hashable {
         case .network: return "wifi"
         case .battery: return "battery.75"
         case .processes: return "list.bullet.rectangle"
+        case .crashReports: return "ladybug"
         case .startupOptimiser: return "power"
         case .bigFiles: return "doc.text.magnifyingglass"
         case .duplicates: return "doc.on.doc"
@@ -70,7 +72,7 @@ enum MacSectionGroup: String, CaseIterable, Identifiable {
     var sections: [MacSection] {
         switch self {
         case .care: return [.dashboard, .smartCare]
-        case .monitor: return [.cpu, .memory, .network, .battery, .processes, .device, .security]
+        case .monitor: return [.cpu, .memory, .network, .battery, .processes, .crashReports, .device, .security]
         case .storage: return [.storage, .bigFiles, .duplicates, .spaceMap, .diskUtility, .uninstaller, .maintenance]
         case .optimise: return [.ramOptimiser, .startupOptimiser]
         }
@@ -150,6 +152,7 @@ struct MacRootView: View {
             case .network: MacNetworkView()
             case .battery: MacBatteryView()
             case .processes: MacProcessesView()
+            case .crashReports: MacCrashReportsView()
             case .startupOptimiser: MacStartupOptimiserView()
             case .bigFiles: MacBigFilesView()
             case .duplicates: MacDuplicatesView()

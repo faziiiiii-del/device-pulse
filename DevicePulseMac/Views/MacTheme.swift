@@ -17,6 +17,7 @@ extension MacSection {
         case .network: return .cyan
         case .battery: return .green
         case .processes: return .brown
+        case .crashReports: return .red
         case .startupOptimiser: return .red
         case .bigFiles: return .mint
         case .duplicates: return .cyan
