@@ -1,9 +1,166 @@
 # Device Pulse — Project Status
 
-_Updated 2026-08-25: repo went live on GitHub, Xcode Cloud groundwork,
-and distribution decisions made. See "2026-08-25 session" below for
-the full rundown — everything further down is still accurate for what
-it covers, just no longer the latest state._
+_Updated 2026-09-10: Disk Utility professional-grade rewrite + external
+code-review fixes + four new Mac features (Bluetooth peripheral battery,
+live Wi-Fi, Crash Reports viewer, Diagnostics Report export). See
+"2026-09-10 session" immediately below. Everything further down is still
+accurate for what it covers, just no longer the latest state._
+
+## 2026-09-10 session: Disk Utility rewrite, review fixes, 4 new features
+
+### Disk Utility (new, Storage group) — full rewrite
+
+`Disk Utility` sidebar item in the Storage group. Built from a detailed
+spec after the user explicitly chose **full in-app functionality with no
+disk-type restrictions** (internal disks included) over the safer
+default I recommended. Layered architecture, everything driven only by
+`diskutil` via `Process` with fixed argument arrays (never a shell):
+
+- `DiskUtility/DiskUtilityModels.swift` — `DiskInfo`, `DiskPartitionInfo`,
+  `DiskVolumeInfo` (APFS role, encryption state, `fingerprint`),
+  `MacDiskFormat`. `sizeBytes` on a volume consistently means
+  capacity-in-use.
+- `DiskUtility/DiskDiscoveryService.swift` — read-only enumeration:
+  `listDisks`, `diskDetails`, `plainVolumeInfo`,
+  `apfsContainersByPhysicalStore`, boot-volume/boot-container lookups,
+  `runPlist`. Filters `VirtualOrPhysical == "Virtual"` to drop APFS
+  container whole-disk entries and hdiutil disk images (same filter
+  `MacDiskHealthMonitor` already used).
+- `DiskUtility/DiskIdentityValidator.swift` — `DiskFingerprint` /
+  `DiskVolumeFingerprint` + `revalidate` / `revalidateVolume` (async,
+  `Task.detached` so the MainActor isn't blocked), used to re-confirm a
+  target hasn't changed identity between the moment the user confirmed
+  and the moment the operation runs.
+- `DiskUtility/DiskOperationService.swift` — the destructive engine
+  (`@MainActor enum`). Every mutating op runs two gates first: an
+  **app-level** boot-disk / boot-volume hard block (independent of
+  diskutil's own refusal) and a **fresh identity revalidation**.
+  erase disk / erase volume / partition / mount / unmount / eject /
+  verify / repair / rename / APFS-encrypt. Passphrases are piped via
+  `-stdinpassphrase`, never passed as an argv argument (visible in
+  `ps`), never stored. `OutputAccumulator` is `NSLock`-guarded.
+- `DiskUtility/DiskUtilityAuditLog.swift` — persisted operation history.
+- `DiskUtility/DiskUtilityErrorTranslator.swift` — plain-language errors.
+- `Views/MacDiskUtilityView.swift` — main view + detail / console /
+  format-confirm / partition-confirm / rename / advanced-info /
+  audit-log sheets. Destructive actions use a typed-confirmation-phrase
+  + checkbox pattern and show the exact device identifier being
+  changed.
+
+Fixed along the way: phantom "volumes" (the `Virtual` filter above), and
+Used/Free showing near-identical values for plain (non-APFS) volumes —
+`used` is now `Size − FreeSpace` for plain volumes only (APFS's
+`FreeSpace` is unreliable and left alone).
+
+### External code-review fixes (commit `af860ac`)
+
+An outside review of commit `a9f1549` found 6 bugs; all were confirmed
+against the actual code before fixing:
+
+1. `eraseVolume` skipped both safety gates entirely. Fixed with a
+   **volume-scoped** `assertNotBootVolume` / `revalidateVolume` pair
+   rather than reusing the disk-level gate — a non-boot data volume can
+   legitimately share a disk with the boot volume, and the disk-level
+   check would over-block that safe case. `eraseVolume` now takes the
+   full `DiskVolumeInfo`, not a bare string.
+2. `encryptNewlyCreatedVolume` ignored its `exactVolumeReplacing`
+   parameter and encrypted `allVolumes.first` — wrong volume on a
+   multi-volume disk. Now matches on the passed device id.
+3. `runProcess`'s termination handler resumed the continuation without
+   draining already-buffered pipe data — truncated/blank error text on
+   failures. Now drains both pipes via `readDataToEndOfFile()` first.
+4. Cancel button had a dead window (`currentProcess` was set via an
+   async `Task` hop after `task.run()`) and a genuinely-cancelled
+   process was logged to the audit log as a failure. Fixed with
+   synchronous assignment + immediate recheck + a `cancelRequested`
+   check in the termination handler that resumes with
+   `CancellationError`.
+5. `resolveDNS` (both `MacNetworkDiagnostics.swift` and the iOS
+   `NetworkDiagnostics.swift`) could hang forever on a stalled resolver.
+   Fixed with the same NSLock double-resume-guard the neighbouring TCP
+   functions use, plus `CFHostCancelInfoResolution` on timeout. Surfaced
+   a follow-up Sendable warning, fixed with `@preconcurrency import
+   CFNetwork` (Mac only — iOS didn't trigger it).
+6. Force-unwrap hardening in `MacDiagnosticsEngine.swift`,
+   `MacBatteryView.swift`, `SnapshotStore.swift`, `HistoryStore.swift`.
+
+**onChange regression noted:** an earlier "fix" (`ef0ca74`) switched
+`Settings`' `onChange(of:perform:)` calls to the two-parameter form,
+which requires macOS 14.0 while this target's deployment target is 13.0.
+The CLI toolchain used for most of this project's verification accepted
+it; the user's real Xcode correctly rejected it. Reverted in `a9f1549`.
+**Standing caveat: CLI `xcodebuild` here does not enforce
+deployment-target API availability the same way real Xcode does — treat
+any version-sensitive Swift/SwiftUI change as unverified until built in
+Xcode.**
+
+### Four new Mac features
+
+- **Bluetooth peripheral battery** (`MacBluetoothMonitor.swift`, commit
+  `b9bcdd4`) — new card in the Device tab. Reads
+  `system_profiler SPBluetoothDataType -json`; shows connected
+  peripherals with reported battery (single-cell for mice / keyboards /
+  trackpads, split L/R/Case for AirPods-style headsets). Devices that
+  don't publish a level are listed without one — no guessed number.
+- **Live Current Wi-Fi** (`MacWiFiInfoMonitor.swift`, commit `e63a335`)
+  — new card in the Network tab above Saved Wi-Fi Networks. Reads
+  `system_profiler SPAirPortDataType -json` for the network joined right
+  now: RSSI, noise, derived SNR, channel / band / width, PHY mode
+  (mapped to Wi-Fi 4/5/6 names), negotiated link rate, security,
+  country code, with a signal bar. Uses the `system_profiler` path
+  specifically because `CWWiFiClient`'s RSSI/SSID accessors prompt for
+  Location on macOS 14+; this doesn't. If macOS still redacts the SSID
+  the card says the name is hidden rather than faking it.
+- **Crash Reports viewer** (`MacCrashReportMonitor.swift` +
+  `MacCrashReportsView.swift`, commit `c6d96ab`) — new sidebar item in
+  the Monitor group. Enumerates crash / kernel-panic / hang-spin /
+  CPU-energy / shutdown-stall reports from
+  `~/Library/Logs/DiagnosticReports` and
+  `/Library/Logs/DiagnosticReports` (+ their `Retired` archives),
+  grouped into 6 categories with counts and a filter. Open shows the
+  report body (pretty-prints the JSON payload of `.ips` files), plus
+  Reveal in Finder and Move to Trash (reversible). List is
+  filename-driven; a body is only read on Open. Reads/deletes for the
+  system-wide folder can fail without Full Disk Access — reported with
+  an FDA hint and deep link, never a fake success. Hard cap of 600
+  most-recent reports.
+- **Diagnostics Report export** (`MacDiagnosticsReport.swift`, commit
+  `624afd5`) — new "Diagnostics" section in Settings. `build()`
+  assembles one plain-text report from data already on screen: system /
+  hardware, the same `MacDiagnosticsEngine` checks the Dashboard runs,
+  all mounted volumes, battery, network + current Wi-Fi, connected
+  Bluetooth peripherals, LaunchAgent/Daemon counts with non-Apple
+  entries listed, and a 30-day summary of diagnostic reports with the
+  most frequent offenders. Runs off-main, then an `NSSavePanel` writes
+  a `.txt` and reveals it in Finder. No new data collection, nothing
+  uploaded.
+
+Verified this session: Mac Debug + Release and iOS all build clean with
+zero warnings; Release build launched and ran without
+crashes/exceptions.
+
+### Explicitly deferred this session
+
+- **iOS home-screen widgets** — would need a new WidgetKit extension
+  target plus an App Group entitlement (so the app can hand battery /
+  storage data to the widget), which touches provisioning/signing and
+  may need the capability enabled in the Apple Developer account. Also
+  squarely in the category the CLI toolchain can't fully verify (see
+  the onChange caveat above). User's call: leave it for now; do it as
+  its own focused change built in real Xcode if revisited.
+
+### Still open / not done
+
+- iOS Home "More Tools" nav-tap issue (see the iOS section far below) —
+  still never confirmed working on a real device.
+- From the external review's "production-grade gaps": no unit-test
+  target, no dry-run mode for Disk Utility, safety gate is a
+  code-review catch rather than structurally enforced (a
+  `ValidatedDiskTarget` type would make the skip-the-gate class of bug
+  impossible), no structured logging (`os.Logger`), and
+  `MARKETING_VERSION` / `CURRENT_PROJECT_VERSION` are still placeholder
+  `"1.0"` / `"1"` — set real values before any TestFlight/notarized
+  build.
 
 ## 2026-08-25 session: repo live, CI groundwork, distribution decisions
 
@@ -209,9 +366,11 @@ four conceptual sections rather than one flat list (as of the later
 session above — Security/Duplicate Finder/Space Map are new since this
 paragraph was first written):
 - **Care** — Dashboard, Smart Care
-- **Monitor** — CPU & Thermal, Memory, Network, Battery, Processes, Device, Security
-- **Storage** — Storage, Big Files Finder, Duplicate Finder, Space Map, Uninstaller, Maintenance
+- **Monitor** — CPU & Thermal, Memory, Network, Battery, Processes, Crash Reports, Device, Security
+- **Storage** — Storage, Big Files Finder, Duplicate Finder, Space Map, Disk Utility, Uninstaller, Maintenance
 - **Optimise** — RAM Optimiser, Startup Optimiser
+
+_(Crash Reports and Disk Utility added in the 2026-09-10 session above.)_
 
 Settings is **not** in the sidebar — it's a real macOS Settings window
 (⌘,), matching platform convention. ⌘1–9 jump to the first nine sidebar
