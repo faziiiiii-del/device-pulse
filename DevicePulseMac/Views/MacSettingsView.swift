@@ -14,6 +14,8 @@ import UniformTypeIdentifiers
 struct MacSettingsView: View {
     @AppStorage("refreshIntervalSeconds") private var refreshInterval: Double = 3
     @AppStorage("alertsEnabled") private var alertsEnabled: Bool = true
+    @AppStorage("historyEnabled") private var historyEnabled: Bool = true
+    @State private var showClearHistoryConfirm = false
     @AppStorage("launchAtLogin") private var launchAtLogin: Bool = false
     @AppStorage("menuBarOnlyMode") private var menuBarOnly: Bool = false
     @AppStorage(AppTheme.storageKey) private var appThemeRaw: String = AppTheme.classic.rawValue
@@ -71,10 +73,24 @@ struct MacSettingsView: View {
                         .foregroundStyle(.secondary)
                 }
                 VStack(alignment: .leading) {
-                    Text("History retention").foregroundStyle(.secondary)
-                    Text("Not built yet — CPU/Memory history is currently just the last 60 in-memory samples per tab, lost on quit. A real 24h/7d/30d history store (which this setting would control) is a planned follow-up, not implemented, so no slider is shown here rather than one that does nothing.")
+                    Toggle("Keep historical trends", isOn: $historyEnabled)
+                        .onChange(of: historyEnabled) { newValue in MacHistoryRecorder.shared.setEnabled(newValue) }
+                    Text("Records one CPU/Memory/Storage/Battery sample every 5 minutes while Device Pulse is running, stored locally in this app's own Application Support folder — nothing leaves this Mac. Powers the History charts on the CPU, Memory, Storage and Battery tabs (24 hours / 7 days / 30 days). Turning this off stops recording entirely; it doesn't delete what's already saved.")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
+                    Button("Clear Saved History…", role: .destructive) { showClearHistoryConfirm = true }
+                        .buttonStyle(.bordered)
+                        .padding(.top, 2)
+                }
+                .confirmationDialog(
+                    "Clear all saved history?",
+                    isPresented: $showClearHistoryConfirm,
+                    titleVisibility: .visible
+                ) {
+                    Button("Clear History", role: .destructive) { MacHistoryStore.shared.clear() }
+                    Button("Cancel", role: .cancel) {}
+                } message: {
+                    Text("This permanently deletes every saved CPU/Memory/Storage/Battery sample. New recording continues afterward if history is still enabled above.")
                 }
             }
 

@@ -169,6 +169,10 @@ final class MacMemoryMonitor: ObservableObject {
         }
     }
 
+    /// One-shot read, independent of a running `MacMemoryMonitor`
+    /// instance — used by the background history recorder.
+    static func currentStats() -> MacMemoryStats? { readMemoryStats() }
+
     /// Best-effort process-level memory footprint for this app itself.
     static func appMemoryUsage() -> UInt64? {
         var info = mach_task_basic_info()

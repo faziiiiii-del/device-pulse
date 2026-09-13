@@ -56,6 +56,10 @@ struct MacMemoryView: View {
                         .frame(height: 100)
                 }
 
+                MacHistoryChartCard(title: "Memory History", systemImage: "chart.line.uptrend.xyaxis", tint: MacSection.memory.tint, unit: "%") { obs in
+                    obs.memoryUsedFraction.map { $0 * 100 }
+                }
+
                 MacCard(title: "Top Memory Users", systemImage: "list.bullet", tint: MacSection.memory.tint) {
                     if topProcesses.isEmpty {
                         Text("Loading…").font(.caption).foregroundStyle(.secondary)

@@ -103,6 +103,10 @@ struct MacCPUView: View {
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                 }
+
+                MacHistoryChartCard(title: "CPU History", systemImage: "chart.line.uptrend.xyaxis", tint: MacSection.cpu.tint, unit: "%") { obs in
+                    obs.cpuUsedFraction.map { $0 * 100 }
+                }
             }
             .padding(24)
         }

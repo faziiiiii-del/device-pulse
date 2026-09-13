@@ -102,6 +102,26 @@ final class MacCPUMonitor: ObservableObject {
         }
     }
 
+    /// One-shot aggregate CPU sample, independent of any running
+    /// `MacCPUMonitor` instance (and its own Timer) — used by the
+    /// background history recorder, which only needs a reading every few
+    /// minutes. Blocks the calling thread for `intervalSeconds` (a delta
+    /// between two tick reads is the only way this API yields a rate);
+    /// callers must invoke this off the main thread.
+    static func sampleAggregateUsedFraction(intervalSeconds: TimeInterval = 1) -> Double? {
+        guard let first = readTicks() else { return nil }
+        Thread.sleep(forTimeInterval: intervalSeconds)
+        guard let second = readTicks() else { return nil }
+
+        let userDelta = Double(second.cpu_ticks.0 &- first.cpu_ticks.0)
+        let systemDelta = Double(second.cpu_ticks.1 &- first.cpu_ticks.1)
+        let idleDelta = Double(second.cpu_ticks.2 &- first.cpu_ticks.2)
+        let niceDelta = Double(second.cpu_ticks.3 &- first.cpu_ticks.3)
+        let total = userDelta + systemDelta + idleDelta + niceDelta
+        guard total > 0 else { return nil }
+        return (userDelta + systemDelta + niceDelta) / total
+    }
+
     private static func sysctlInt(_ name: String) -> Int? {
         var value: Int32 = 0
         var size = MemoryLayout<Int32>.size

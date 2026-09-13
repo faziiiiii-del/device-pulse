@@ -99,6 +99,10 @@ struct MacBatteryView: View {
 
                     Text("Percentage, charging state, and time estimates are read via the public IOKit power-source API. Cycle count, capacities, voltage, and current are read from IORegistry's AppleSmartBattery service — the standard, though not formally documented, way any Mac battery utility reads this. Time estimates and discharge rate are inherently approximate — actual runtime depends on what you're doing.")
                         .font(.caption2).foregroundStyle(.secondary)
+
+                    MacHistoryChartCard(title: "Battery History", systemImage: "chart.line.uptrend.xyaxis", tint: MacSection.battery.tint, unit: "%") { obs in
+                        obs.batteryLevel.map(Double.init)
+                    }
                 } else if hasBattery {
                     MacCard(title: "Battery", systemImage: "battery.75", tint: MacSection.battery.tint) {
                         Text("Battery detected but details are currently unavailable.")

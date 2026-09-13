@@ -74,6 +74,10 @@ struct MacStorageView: View {
 
                 diskHealthCard
                 timeMachineCard
+
+                MacHistoryChartCard(title: "Storage History", systemImage: "chart.line.uptrend.xyaxis", tint: MacSection.storage.tint, unit: "%") { obs in
+                    obs.storageUsedFraction.map { $0 * 100 }
+                }
             }
             .padding(24)
         }

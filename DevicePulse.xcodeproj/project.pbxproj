@@ -59,6 +59,7 @@
 		7D364B9DCE2402ECADEBBD77 /* InvestigateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD7856F339F1A86FEB0B9B06 /* InvestigateView.swift */; };
 		7E074A5DEFFD67638159A90D /* MacStartupOptimiserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CE468FFC154510F57456CD6 /* MacStartupOptimiserView.swift */; };
 		7E24E59E5295788CC14B4A98 /* MacTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEF8F3D370994F4795FC6C4 /* MacTheme.swift */; };
+		7E6989D19DF17DED871A3C2B /* MacHistoryRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB18CD87E6C9654A102F15D5 /* MacHistoryRecorder.swift */; };
 		7FBEBC27BFCE4A2BF20CDF1A /* AppCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422B31D650747C17A258946A /* AppCacheManager.swift */; };
 		8185A1C86F7E882A7FCD770C /* MacSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C9CDF687250D59E564E9085 /* MacSettingsView.swift */; };
 		82BD648C433B898C4A5CEDF1 /* MacCPUView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9355367E48AC3910DD249DD /* MacCPUView.swift */; };
@@ -73,8 +74,10 @@
 		92BF4D5F43349A33DE5BD25C /* MacDiskHealthMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD62F1F96A2817342DB3C2A /* MacDiskHealthMonitor.swift */; };
 		959351A58971F5E7E80B4808 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 3134086C3E34235C4F83F959 /* PrivacyInfo.xcprivacy */; };
 		95D000D4CF46B49F93A4FC36 /* SecurityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0336AC61FD60EF34079EFFDE /* SecurityView.swift */; };
+		99E88BDEE78DEBAA4FA9F968 /* MacHistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E212CD34A7233603AE58F6 /* MacHistoryStore.swift */; };
 		9B9718F1F60823A198B6F57C /* MacDiagnosticsReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = C197DDB2E25A208DE175C526 /* MacDiagnosticsReport.swift */; };
 		9CA869E5C65BA75A7CD63B2D /* DiskUtilityModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325775A4774CA62EBF3481A6 /* DiskUtilityModels.swift */; };
+		9FE6DDFF12E8056C5CF6B55D /* MacHistoryChartCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71F93425F4E53A2F31D3E1E /* MacHistoryChartCard.swift */; };
 		A19CB9B54F378779A13FF90E /* SecurityQuarantineManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FCFE2F543F2DDF6FA56784 /* SecurityQuarantineManager.swift */; };
 		A3E5BF558E1319444B58DD4E /* StatusUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0672319914105A55F904BC /* StatusUI.swift */; };
 		A4057443E2709C3DC5E94D9E /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E0C1B43D14B9EE39557D36 /* Components.swift */; };
@@ -168,6 +171,7 @@
 		715F27E79223C0F9C1318735 /* MacCrashReportsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacCrashReportsView.swift; sourceTree = "<group>"; };
 		73C4A79889E32BC8D6D0F443 /* MacBigFilesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacBigFilesView.swift; sourceTree = "<group>"; };
 		7594A94D5BB08570011B2CDF /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		75E212CD34A7233603AE58F6 /* MacHistoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacHistoryStore.swift; sourceTree = "<group>"; };
 		7654C47BA8BA239806F877E6 /* SecurityEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityEngine.swift; sourceTree = "<group>"; };
 		76C9D1C712163C3AB56ADCA0 /* MacProcessesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacProcessesView.swift; sourceTree = "<group>"; };
 		76FCFE2F543F2DDF6FA56784 /* SecurityQuarantineManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityQuarantineManager.swift; sourceTree = "<group>"; };
@@ -196,6 +200,7 @@
 		B50BB03DEA2B58A2281F0D72 /* MacTrashUndo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacTrashUndo.swift; sourceTree = "<group>"; };
 		B58E8BD1DE616C90461D5C58 /* Formatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatting.swift; sourceTree = "<group>"; };
 		BAA1BD881404881766A197EF /* MacStorageMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacStorageMonitor.swift; sourceTree = "<group>"; };
+		BB18CD87E6C9654A102F15D5 /* MacHistoryRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacHistoryRecorder.swift; sourceTree = "<group>"; };
 		BB4247BC98C6C0F691B46A72 /* MemoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryView.swift; sourceTree = "<group>"; };
 		BD7856F339F1A86FEB0B9B06 /* InvestigateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvestigateView.swift; sourceTree = "<group>"; };
 		C197DDB2E25A208DE175C526 /* MacDiagnosticsReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDiagnosticsReport.swift; sourceTree = "<group>"; };
@@ -214,6 +219,7 @@
 		E1602A9DFF852C31F59367A1 /* LiveMonitorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveMonitorView.swift; sourceTree = "<group>"; };
 		E4B841160780DF4F8EDEBF45 /* MacCPUMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacCPUMonitor.swift; sourceTree = "<group>"; };
 		E4CD22DB3AAB1A05D620ECAF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E71F93425F4E53A2F31D3E1E /* MacHistoryChartCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacHistoryChartCard.swift; sourceTree = "<group>"; };
 		E9C9048F0540D558E07ACCB3 /* MoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreView.swift; sourceTree = "<group>"; };
 		EC1936D11F4EDE90B450A753 /* MacUndoToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacUndoToast.swift; sourceTree = "<group>"; };
 		EC4C4727297E999F49C45B1D /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
@@ -272,6 +278,8 @@
 				FE869E1B3A6F50F7CAC9A437 /* MacDuplicateScanner.swift */,
 				170E687F61E32C32AC592738 /* MacFileHasher.swift */,
 				2E0848CB6B6BAD2AD80B7B71 /* MacGPUMonitor.swift */,
+				BB18CD87E6C9654A102F15D5 /* MacHistoryRecorder.swift */,
+				75E212CD34A7233603AE58F6 /* MacHistoryStore.swift */,
 				C36A21DF802A1C3AA7CF958C /* MacMemoryMonitor.swift */,
 				895C594B0B09BD12105F81BE /* MacMemoryOptimizer.swift */,
 				CD4A5F362B4BB4B9DB09A8FE /* MacNetworkDiagnostics.swift */,
@@ -328,6 +336,7 @@
 				F71FFFEA3F7333C4A0CE9647 /* MacDeviceView.swift */,
 				7848454E9F55163805AAF899 /* MacDiskUtilityView.swift */,
 				29AE2D766317C15E13C1FDCC /* MacDuplicatesView.swift */,
+				E71F93425F4E53A2F31D3E1E /* MacHistoryChartCard.swift */,
 				23545501EAE4FCCA6AC774FB /* MacMaintenanceView.swift */,
 				0D6C5999F6CB6F194AC165E2 /* MacMemoryView.swift */,
 				9C7CACDD01E8C5FBE13FE033 /* MacMenuBarView.swift */,
@@ -583,6 +592,9 @@
 				02565B9C4FEEDC0C92DC0704 /* MacDuplicatesView.swift in Sources */,
 				6627C65174115BCD691370E3 /* MacFileHasher.swift in Sources */,
 				CF137279F8D4432603AD4125 /* MacGPUMonitor.swift in Sources */,
+				9FE6DDFF12E8056C5CF6B55D /* MacHistoryChartCard.swift in Sources */,
+				7E6989D19DF17DED871A3C2B /* MacHistoryRecorder.swift in Sources */,
+				99E88BDEE78DEBAA4FA9F968 /* MacHistoryStore.swift in Sources */,
 				5BBA28FCE17ED994B452D4E9 /* MacMaintenanceView.swift in Sources */,
 				E6E5D7271BACFEC3B013B450 /* MacMemoryMonitor.swift in Sources */,
 				2C77A8363E6CE0027554774E /* MacMemoryOptimizer.swift in Sources */,

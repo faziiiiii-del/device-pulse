@@ -14,6 +14,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let menuBarOnly = UserDefaults.standard.bool(forKey: "menuBarOnlyMode")
         NSApp.setActivationPolicy(menuBarOnly ? .accessory : .regular)
         MacAlertMonitor.shared.start()
+        MacHistoryRecorder.shared.start()
     }
 }
 
