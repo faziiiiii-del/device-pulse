@@ -8,6 +8,7 @@
 //  background monitor, and it stops the moment you leave.
 //
 
+import Combine
 import SwiftUI
 
 struct LiveMonitorView: View {

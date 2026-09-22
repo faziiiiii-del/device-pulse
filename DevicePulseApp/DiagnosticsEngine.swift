@@ -174,11 +174,26 @@ struct NWPathMonitorSnapshot {
     static func current() async -> NWPathMonitorSnapshot {
         await withCheckedContinuation { continuation in
             let monitor = NWPathMonitor()
-            var didResume = false
             let queue = DispatchQueue(label: "com.devicedashboard.networksnapshot")
-            monitor.pathUpdateHandler = { path in
-                guard !didResume else { return }
+            // pathUpdateHandler and the asyncAfter timeout both run on the
+            // same serial `queue`, so this was never a live race in
+            // practice — but a plain `var didResume` captured by two
+            // escaping closures can't be proven data-race-free by the
+            // compiler, which is an error under the Swift 6 language mode.
+            // Same NSLock-guarded resumeOnce pattern already used by
+            // MacNetworkDiagnostics/NetworkDiagnostics' resolveDNS.
+            let resumeLock = NSLock()
+            var didResume = false
+            let resumeOnce: (NWPathMonitorSnapshot) -> Void = { result in
+                resumeLock.lock()
+                let alreadyResumed = didResume
                 didResume = true
+                resumeLock.unlock()
+                guard !alreadyResumed else { return }
+                monitor.cancel()
+                continuation.resume(returning: result)
+            }
+            monitor.pathUpdateHandler = { path in
                 let connected = path.status == .satisfied
                 var typeText = "No Connection"
                 if path.usesInterfaceType(.wifi) {
@@ -190,15 +205,11 @@ struct NWPathMonitorSnapshot {
                 } else if connected {
                     typeText = "Connected"
                 }
-                monitor.cancel()
-                continuation.resume(returning: NWPathMonitorSnapshot(isConnected: connected, typeText: typeText))
+                resumeOnce(NWPathMonitorSnapshot(isConnected: connected, typeText: typeText))
             }
             monitor.start(queue: queue)
             queue.asyncAfter(deadline: .now() + 2) {
-                guard !didResume else { return }
-                didResume = true
-                monitor.cancel()
-                continuation.resume(returning: NWPathMonitorSnapshot(isConnected: false, typeText: "No Connection"))
+                resumeOnce(NWPathMonitorSnapshot(isConnected: false, typeText: "No Connection"))
             }
         }
     }

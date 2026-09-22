@@ -60,12 +60,34 @@ struct MacMenuBarContent: View {
 
             Divider()
 
+            // Both navigate into the main window rather than acting
+            // directly from this popover — Run Full Diagnostic needs
+            // room to show real results, and Empty Trash is the one
+            // genuinely permanent action in the app, which keeps its
+            // stronger confirmation dialog in Maintenance rather than a
+            // one-click shortcut bypassing it here.
+            Button {
+                openMainWindow()
+                NotificationCenter.default.post(name: .navigateToSection, object: MacSection.dashboard)
+            } label: {
+                Label("Run Full Diagnostic", systemImage: "stethoscope")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .buttonStyle(.plain)
+
+            Button {
+                openMainWindow()
+                NotificationCenter.default.post(name: .navigateToSection, object: MacSection.maintenance)
+            } label: {
+                Label("Empty Trash…", systemImage: "trash")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .buttonStyle(.plain)
+
+            Divider()
+
             Button("Open Device Pulse") {
-                NSApplication.shared.activate(ignoringOtherApps: true)
-                for window in NSApplication.shared.windows where window.canBecomeKey {
-                    window.makeKeyAndOrderFront(nil)
-                    break
-                }
+                openMainWindow()
             }
             .buttonStyle(.borderedProminent)
             .frame(maxWidth: .infinity)
@@ -86,6 +108,14 @@ struct MacMenuBarContent: View {
         .onReceive(timer) { _ in
             volume = MacStorageMonitor.mainVolume()
             securityIndicator = SecurityStatusCache.menuBarIndicator
+        }
+    }
+
+    private func openMainWindow() {
+        NSApplication.shared.activate(ignoringOtherApps: true)
+        for window in NSApplication.shared.windows where window.canBecomeKey {
+            window.makeKeyAndOrderFront(nil)
+            break
         }
     }
 

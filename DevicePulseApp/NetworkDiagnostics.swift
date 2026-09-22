@@ -27,6 +27,13 @@
 import Foundation
 import Network
 import Darwin
+// CFHost predates Swift concurrency and isn't marked Sendable, but it's used here exactly
+// as Apple's own APIs intend — passed by reference into background-queue closures that
+// never touch it concurrently in a way that would matter (resolve, or cancel-on-timeout,
+// never both at genuinely the same instant thanks to the resumeOnce lock in resolveDNS).
+// Apple's own compiler diagnostic suggests this exact fix for pre-concurrency system
+// types. Same fix already applied to the Mac target's copy of this file.
+@preconcurrency import CFNetwork
 
 enum NetworkDiagnostics {
     struct Result {

@@ -3,6 +3,7 @@
 //  DevicePulse
 //
 
+import Combine
 import SwiftUI
 
 struct MemoryView: View {
