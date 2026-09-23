@@ -16,6 +16,7 @@
 		0E8AEB184FA49F2EE14E5BA3 /* PhotoLibraryMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225E105C72B8D61833360CDD /* PhotoLibraryMonitor.swift */; };
 		1976FC6610A3768E3F9CA6E3 /* MacStartupMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB3A290F4E28C2DCFDA16B3 /* MacStartupMonitor.swift */; };
 		197EAC8F33264B6C22A2C730 /* MacCrashReportMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808F5EB01444CF1AF781E1E4 /* MacCrashReportMonitor.swift */; };
+		1A810A72590EF408432D0C93 /* WiFiInfoReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C04DBEC8362A2916F121693 /* WiFiInfoReader.swift */; };
 		1A9F6DB7E824B510DE632833 /* MacStorageCategoryScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247305412606B8280764A746 /* MacStorageCategoryScanner.swift */; };
 		1B7B01D9FC5F98F52BC59F39 /* ThermalMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B24A50D30D16BE66B7315E /* ThermalMonitor.swift */; };
 		1C22BEE17A601BE1326A2203 /* MacWiFiInfoMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBB59FB5E186AE0C910EAC69 /* MacWiFiInfoMonitor.swift */; };
@@ -45,6 +46,7 @@
 		5052954776D255A3FA9F1422 /* StorageMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FAD4A3EB4B516F56C5DEB02 /* StorageMonitor.swift */; };
 		5156097E86058D095CF8D88C /* BatteryMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7CD9EA299EAEA567EF0507E /* BatteryMonitor.swift */; };
 		51F82AB4C8B3165EDDDA8F1D /* MacStorageScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 666B31B0282D251793A6F0E0 /* MacStorageScanner.swift */; };
+		5223B66252ED2467935B1F91 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A60B8B375CF1A49D11F6B5EB /* NetworkExtension.framework */; };
 		54B5B5ABD42D3C9767F388EE /* MacNetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C544C17BA47EE9CDFC2EF84 /* MacNetworkMonitor.swift */; };
 		57AD4BE9AE51E01FE20B0671 /* MemoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4247BC98C6C0F691B46A72 /* MemoryView.swift */; };
 		58F2EEAF3D38E2363E1ED429 /* MacCrashReportsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715F27E79223C0F9C1318735 /* MacCrashReportsView.swift */; };
@@ -88,6 +90,7 @@
 		B267268A561A44EC50573AC0 /* MacNetworkDiagnostics.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4A5F362B4BB4B9DB09A8FE /* MacNetworkDiagnostics.swift */; };
 		B466C6844E66D63FC6365FD5 /* NetworkDiagnostics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8CCCF4AB2EB865B91C2619 /* NetworkDiagnostics.swift */; };
 		B514FAAD9BE748E9A707B829 /* MacDiskUtilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7848454E9F55163805AAF899 /* MacDiskUtilityView.swift */; };
+		B77D2E32661DEF8DDA290619 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98E517CB9071184BECBC3F96 /* CoreLocation.framework */; };
 		B7B95EBC851163642BA7AC5F /* DiagnosticView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6EC2E23F0499B771BB0A49 /* DiagnosticView.swift */; };
 		B9C6D5DF3EFB2C49D821CBC9 /* LiveMonitorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1602A9DFF852C31F59367A1 /* LiveMonitorView.swift */; };
 		BA2A0436F505ABD1433362EB /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7594A94D5BB08570011B2CDF /* HomeView.swift */; };
@@ -135,6 +138,7 @@
 		1A652BA7458C6FA8C5F2AADA /* MacBluetoothMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacBluetoothMonitor.swift; sourceTree = "<group>"; };
 		1D8CCCF4AB2EB865B91C2619 /* NetworkDiagnostics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkDiagnostics.swift; sourceTree = "<group>"; };
 		1FE63454D8DA326DF12ACE59 /* DiagnosticModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticModels.swift; sourceTree = "<group>"; };
+		204EDA96854E49DDFE151B90 /* DevicePulse.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DevicePulse.entitlements; sourceTree = "<group>"; };
 		225E105C72B8D61833360CDD /* PhotoLibraryMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibraryMonitor.swift; sourceTree = "<group>"; };
 		23545501EAE4FCCA6AC774FB /* MacMaintenanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacMaintenanceView.swift; sourceTree = "<group>"; };
 		247305412606B8280764A746 /* MacStorageCategoryScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacStorageCategoryScanner.swift; sourceTree = "<group>"; };
@@ -143,8 +147,8 @@
 		2E0848CB6B6BAD2AD80B7B71 /* MacGPUMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacGPUMonitor.swift; sourceTree = "<group>"; };
 		2F60D747C7FB6FC2BD692353 /* StorageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageView.swift; sourceTree = "<group>"; };
 		30D5A61F4F1E5AB8D2E70E4B /* MacBatteryMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacBatteryMonitor.swift; sourceTree = "<group>"; };
-		311CD24B206C47B05CE8CA6B /* DevicePulse.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = DevicePulse.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		3134086C3E34235C4F83F959 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		311CD24B206C47B05CE8CA6B /* DevicePulse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DevicePulse.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3134086C3E34235C4F83F959 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		31369DD23B94327A9EA3EA80 /* MacAppUninstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacAppUninstaller.swift; sourceTree = "<group>"; };
 		325775A4774CA62EBF3481A6 /* DiskUtilityModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskUtilityModels.swift; sourceTree = "<group>"; };
 		35FCA297D7182B02C1E2C64D /* DevicePulseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicePulseApp.swift; sourceTree = "<group>"; };
@@ -162,6 +166,7 @@
 		6142382211259BAAB4404452 /* MacDeviceMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDeviceMonitor.swift; sourceTree = "<group>"; };
 		635293B1D0FAFDB58AB40A33 /* MacThermalMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacThermalMonitor.swift; sourceTree = "<group>"; };
 		666B31B0282D251793A6F0E0 /* MacStorageScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacStorageScanner.swift; sourceTree = "<group>"; };
+		6C04DBEC8362A2916F121693 /* WiFiInfoReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WiFiInfoReader.swift; sourceTree = "<group>"; };
 		6C544C17BA47EE9CDFC2EF84 /* MacNetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacNetworkMonitor.swift; sourceTree = "<group>"; };
 		6CE468FFC154510F57456CD6 /* MacStartupOptimiserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacStartupOptimiserView.swift; sourceTree = "<group>"; };
 		6D3D384BA83A7FC521C53F03 /* MemoryMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryMonitor.swift; sourceTree = "<group>"; };
@@ -189,8 +194,10 @@
 		91673926E66C8AF2C9045FF5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		91DB0F1621E10F7246B2E3D2 /* MacDiagnosticsEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDiagnosticsEngine.swift; sourceTree = "<group>"; };
 		97EA925C8598751A73BA9373 /* MacRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacRootView.swift; sourceTree = "<group>"; };
+		98E517CB9071184BECBC3F96 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		9C7CACDD01E8C5FBE13FE033 /* MacMenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacMenuBarView.swift; sourceTree = "<group>"; };
 		9DD62F1F96A2817342DB3C2A /* MacDiskHealthMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDiskHealthMonitor.swift; sourceTree = "<group>"; };
+		A60B8B375CF1A49D11F6B5EB /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
 		A62784751AEFEB9309F80659 /* DevicePulseThresholds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicePulseThresholds.swift; sourceTree = "<group>"; };
 		A704248F9E28E1E5F323566A /* AdvancedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedView.swift; sourceTree = "<group>"; };
 		A875A38A42B448DDD290B9F0 /* MacStorageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacStorageView.swift; sourceTree = "<group>"; };
@@ -226,13 +233,25 @@
 		EC8F2BA3B625975F8CC4B20D /* BatteryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryView.swift; sourceTree = "<group>"; };
 		F446FCA1816C817E07CF20FC /* MacComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacComponents.swift; sourceTree = "<group>"; };
 		F71FFFEA3F7333C4A0CE9647 /* MacDeviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDeviceView.swift; sourceTree = "<group>"; };
-		F820999029635E4D8E5FB4A8 /* DevicePulseMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DevicePulseMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F820999029635E4D8E5FB4A8 /* Device Pulse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Device Pulse.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8B24A50D30D16BE66B7315E /* ThermalMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThermalMonitor.swift; sourceTree = "<group>"; };
 		F8D727512B24AC9A8108070C /* MacTimeMachineMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacTimeMachineMonitor.swift; sourceTree = "<group>"; };
 		FD5DDA2F0EA75A46C81B1D3E /* NetworkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkView.swift; sourceTree = "<group>"; };
 		FD928AA7CE50D8547EAE3382 /* MacSpaceMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacSpaceMapView.swift; sourceTree = "<group>"; };
 		FE869E1B3A6F50F7CAC9A437 /* MacDuplicateScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDuplicateScanner.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3B9AD87E98C946A4CD98FA1F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5223B66252ED2467935B1F91 /* NetworkExtension.framework in Frameworks */,
+				B77D2E32661DEF8DDA290619 /* CoreLocation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		1027CB851556CB32A91637AF /* DevicePulseMac */ = {
@@ -257,6 +276,15 @@
 				325775A4774CA62EBF3481A6 /* DiskUtilityModels.swift */,
 			);
 			path = DiskUtility;
+			sourceTree = "<group>";
+		};
+		3BB7D6967E0F95E462E039C0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				98E517CB9071184BECBC3F96 /* CoreLocation.framework */,
+				A60B8B375CF1A49D11F6B5EB /* NetworkExtension.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		4D0BE51B9BF53604FC9E8727 /* Monitors */ = {
@@ -318,7 +346,7 @@
 			isa = PBXGroup;
 			children = (
 				311CD24B206C47B05CE8CA6B /* DevicePulse.app */,
-				F820999029635E4D8E5FB4A8 /* DevicePulseMac.app */,
+				F820999029635E4D8E5FB4A8 /* Device Pulse.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -370,6 +398,7 @@
 				18E0C1B43D14B9EE39557D36 /* Components.swift */,
 				91673926E66C8AF2C9045FF5 /* ContentView.swift */,
 				3F065DD5F1E7090972CC1E5A /* DeviceInfo.swift */,
+				204EDA96854E49DDFE151B90 /* DevicePulse.entitlements */,
 				35FCA297D7182B02C1E2C64D /* DevicePulseApp.swift */,
 				1A398B57496DE84E3DC46DE8 /* DiagnosticsEngine.swift */,
 				7D6EC2E23F0499B771BB0A49 /* DiagnosticView.swift */,
@@ -393,6 +422,7 @@
 				6FAD4A3EB4B516F56C5DEB02 /* StorageMonitor.swift */,
 				2F60D747C7FB6FC2BD692353 /* StorageView.swift */,
 				F8B24A50D30D16BE66B7315E /* ThermalMonitor.swift */,
+				6C04DBEC8362A2916F121693 /* WiFiInfoReader.swift */,
 			);
 			path = DevicePulseApp;
 			sourceTree = "<group>";
@@ -413,6 +443,7 @@
 				BE6E1E17E1A7A417D8DD1BC4 /* DevicePulseApp */,
 				1027CB851556CB32A91637AF /* DevicePulseMac */,
 				C7738BB169C3EAE1336EEB9E /* Shared */,
+				3BB7D6967E0F95E462E039C0 /* Frameworks */,
 				6ACFA3008D734A0A6CC90742 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -435,7 +466,7 @@
 			packageProductDependencies = (
 			);
 			productName = DevicePulseMac;
-			productReference = F820999029635E4D8E5FB4A8 /* DevicePulseMac.app */;
+			productReference = F820999029635E4D8E5FB4A8 /* Device Pulse.app */;
 			productType = "com.apple.product-type.application";
 		};
 		E6BF4D58635D4F071FBA840C /* DevicePulse */ = {
@@ -444,6 +475,7 @@
 			buildPhases = (
 				27AC9AA6D258C15496679EC7 /* Sources */,
 				3674D98C8FBE52D0515A4F84 /* Resources */,
+				3B9AD87E98C946A4CD98FA1F /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -463,7 +495,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 2700;
 				TargetAttributes = {
 					065C6CB1B072F14CC7F3EADD = {
 						DevelopmentTeam = TNXUTW58NH;
@@ -550,6 +582,7 @@
 				5052954776D255A3FA9F1422 /* StorageMonitor.swift in Sources */,
 				AD3BE64A9E608DED5CF683E5 /* StorageView.swift in Sources */,
 				1B7B01D9FC5F98F52BC59F39 /* ThermalMonitor.swift in Sources */,
+				1A810A72590EF408432D0C93 /* WiFiInfoReader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -674,7 +707,9 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = TNXUTW58NH;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -690,6 +725,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
@@ -700,25 +736,28 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = DevicePulseApp/DevicePulse.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = TNXUTW58NH;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Device Pulse";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Only used to let iOS reveal the name of the Wi-Fi network you're connected to on the Network tab — Apple requires Location access for this on every app, not just this one. Your location is never recorded, stored, or sent anywhere.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Used to estimate how much storage your Photos library is using. Nothing is uploaded or shared.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				"INFOPLIST_KEY_UISupportedInterfaceOrientations~ipad" = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.faziii.devicepulse;
 				SDKROOT = iphoneos;
@@ -732,25 +771,28 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = DevicePulseApp/DevicePulse.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = TNXUTW58NH;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Device Pulse";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Only used to let iOS reveal the name of the Wi-Fi network you're connected to on the Network tab — Apple requires Location access for this on every app, not just this one. Your location is never recorded, stored, or sent anywhere.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Used to estimate how much storage your Photos library is using. Nothing is uploaded or shared.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				"INFOPLIST_KEY_UISupportedInterfaceOrientations~ipad" = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.faziii.devicepulse;
 				SDKROOT = iphoneos;
@@ -794,7 +836,9 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = TNXUTW58NH;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -817,6 +861,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -831,17 +876,17 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = TNXUTW58NH;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Device Pulse";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.faziii.devicepulse.mac;
 				PRODUCT_NAME = "Device Pulse";
@@ -859,17 +904,17 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = TNXUTW58NH;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Device Pulse";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.faziii.devicepulse.mac;
 				PRODUCT_NAME = "Device Pulse";

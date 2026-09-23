@@ -11,6 +11,13 @@ targets:
     platform: iOS
     sources:
       - path: DevicePulseApp
+    dependencies:
+      - sdk: NetworkExtension.framework
+      - sdk: CoreLocation.framework
+    entitlements:
+      path: DevicePulseApp/DevicePulse.entitlements
+      properties:
+        com.apple.developer.networking.wifi-info: true
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.faziii.devicepulse
@@ -24,6 +31,7 @@ targets:
         INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
         INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
         INFOPLIST_KEY_NSPhotoLibraryUsageDescription: "Used to estimate how much storage your Photos library is using. Nothing is uploaded or shared."
+        INFOPLIST_KEY_NSLocationWhenInUseUsageDescription: "Only used to let iOS reveal the name of the Wi-Fi network you're connected to on the Network tab — Apple requires Location access for this on every app, not just this one. Your location is never recorded, stored, or sent anywhere."
         INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
         INFOPLIST_KEY_UISupportedInterfaceOrientations~ipad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
         TARGETED_DEVICE_FAMILY: "1"

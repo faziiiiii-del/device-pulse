@@ -4,9 +4,11 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct NetworkView: View {
     @StateObject private var network = NetworkMonitor()
+    @StateObject private var wifiInfo = WiFiInfoReader()
 
     @State private var isTesting = false
     @State private var testStage = ""
@@ -20,6 +22,7 @@ struct NetworkView: View {
             ScrollView {
                 VStack(spacing: 16) {
                     networkCard
+                    wifiIdentityCard
                     interfacesCard
                     testCard
                     if !latencyHistory.isEmpty {
@@ -53,9 +56,61 @@ struct NetworkView: View {
                             .foregroundStyle(.orange)
                     }
                 }
-                Text("Wi-Fi signal strength (dBm/RSSI) has no public API on iOS — it can't be shown accurately by any App Store app. SSID also isn't shown here: reading it requires either Location permission or the \"Access WiFi Information\" entitlement, and this app doesn't request Location for just that.")
+                Text("Wi-Fi signal strength (dBm/RSSI) has no public API on iOS — no app, including this one, can show it accurately. The network's name is available below, with your permission.")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    private var wifiIdentityCard: some View {
+        StatCard(title: "Wi-Fi Network", systemImage: "wifi.circle") {
+            switch wifiInfo.authorizationStatus {
+            case .notDetermined:
+                Text("iOS only reveals the connected Wi-Fi network's name to an app if you grant Location access — that's Apple's requirement, not a choice this app makes. Nothing about your location is ever recorded or sent anywhere; it's only used on-device to unlock this one field.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Button {
+                    wifiInfo.requestAccessAndFetch()
+                } label: {
+                    Label("Show Wi-Fi Network Name", systemImage: "location")
+                }
+                .buttonStyle(.bordered)
+
+            case .denied, .restricted:
+                Text("Location access is off, so the network name can't be read. Turn it on in Settings if you'd like to see it here.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Button("Open Settings") {
+                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                        UIApplication.shared.open(url)
+                    }
+                }
+                .buttonStyle(.bordered)
+
+            case .authorizedWhenInUse, .authorizedAlways:
+                if wifiInfo.isLoading {
+                    ProgressView().frame(maxWidth: .infinity, alignment: .center)
+                } else if let info = wifiInfo.info {
+                    InfoRow(label: "Network", value: info.ssid)
+                    InfoRow(label: "Access Point (BSSID)", value: info.bssid)
+                    InfoRow(label: "Security", value: info.securityLabel)
+                    Button("Refresh") { wifiInfo.fetch() }
+                        .buttonStyle(.bordered)
+                        .controlSize(.small)
+                } else if wifiInfo.lookupFailed {
+                    Text("Couldn't read a network name — you may not be on Wi-Fi right now, or this can happen in the Simulator or under some MDM-managed network profiles.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Button("Try Again") { wifiInfo.fetch() }
+                        .buttonStyle(.bordered)
+                } else {
+                    ProgressView().frame(maxWidth: .infinity, alignment: .center)
+                        .onAppear { wifiInfo.fetch() }
+                }
+
+            @unknown default:
+                EmptyView()
             }
         }
     }
